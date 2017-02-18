@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <title>Let's do some Quiz</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/simple-sidebar.css' %}">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><p>Kontrolli teadmisi!</p></li>
+                {% if quiz_list %}
+                {% for quiz in quiz_list %}
+                   <li><a href="{% url 'polls:test' quiz.id %}">{{ quiz.name }}</a></li>
+                {% endfor %}
+                {% else %}
+                    <p>No quizes available..</p>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+</body>
+
+</html>
