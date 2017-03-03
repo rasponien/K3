@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Title Goes Here</title>
+
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/main.css') }}">
+
+</head>
+
+<body>
+    <div id="effects">
+        <button id="animationButton"> Make me bigger! </button>
+        <div id="fadeInTextBox">
+            <div id="fadeInText">Tere tulemast!</div>
+        </div>
+        <form id="filterForm">
+            <h1 class="filter" for="filterText">Kodutöö 2</h1>
+            <input class="filter" id="filterText" type="text" name="filterText" placeholder="Enter some text..." autocomplete="off">
+            <input id="submitBtn" type="submit" value="Submit">
+        </form>
+        <select id="selectKeywordBox"></select>
+        <ul>
+
+        </ul>
+    </div>
+    <script src="{{ url_for('static', filename='script/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='script/main.js') }}"></script>
+</body>
+
+</html>
