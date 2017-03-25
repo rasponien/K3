@@ -1,5 +1,5 @@
-<div ng-if="searchResult.length == 0">
-    Mingi lisatingimus, et õelda, et tulemust ei ole
+<div class="noResult" ng-if="searchResult.length == 0">
+    Sellise nimelist looma ei leitud!
 </div>
 <div ng-if="searchResult.length != 0" ng-repeat="a in searchResult">
     <div class="animalData">

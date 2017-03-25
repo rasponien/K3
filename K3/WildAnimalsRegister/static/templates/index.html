@@ -25,34 +25,21 @@
                 <button class="button" ng-click="setQueryType('byLocation')">Otsi looma asukoha järgi</button>
             </div>
 
-
-            <div class="searchForm" ng-if="getQueryType() == 'byName'">
+            <div class="searchForm" ng-show="getQueryType() == 'byName'">
                 <form ng-submit="searchByName($event)" method="POST" id="FormSearchByName">
-                            <label for="animalName">Sisesta otsinguks looma nimi</label>
-                            <div class="input-group">
-                                <span class="input-group-addon" id="animalIcon"><i class="fa fa-paw"></i></span>
-                                <input type="text" class="form-control" id="animalName" name="animalName" aria-describedby="animalIcon">
-                            </div>
-                        </div>
+                    <label for="animalName">Sisesta otsinguks looma nimi</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="animalIcon"><i class="fa fa-paw"></i></span>
+                        <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName" aria-describedby="animalIcon">
+                        <button class="button search" type="submit">Tee otsing</button>
                     </div>
-                    </br>
-                    <button class="btn btn-default" type="submit">Tee otsing</button>
                 </form>
             </div>
 
-
-        </div>
-
-    </div>
-
-
-
-
-
-    <div ng-controller="wildAnimalsController" class="card">
-        <div class="card-block">
             <div ng-include="'{% static 'templates/AngularTemplates/searchResultByName.html' %}'"></div>
+
         </div>
+
     </div>
 
 </div>

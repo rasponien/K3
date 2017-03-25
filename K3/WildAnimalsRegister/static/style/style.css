@@ -1,7 +1,3 @@
-.container-center {
-    margin-top: 100px;
-}
-
 .button {
     margin: 30px auto;
     width: inherit;
@@ -72,7 +68,7 @@
 }
 
 .buttonBar {
-    margin: 0 auto;
+    margin: 0 auto 30px auto;
     width: 500px;
 }
 
@@ -114,6 +110,12 @@
     padding: 0;
 }
 
+.search {
+    margin: 0;
+    width: 95px;
+    height: 40px;
+}
+
 .main-title {
     float: left;
     height: 29px;
@@ -128,7 +130,7 @@
 .main-content {
     width: 950px;
     min-height: inherit;
-    float: left;
+    display: inline-block;
 }
 
 #queryTypes {
@@ -140,4 +142,8 @@
     width: 400px;
     margin: 60px auto;
     text-align: center;
+}
+
+.noResult {
+
 }

@@ -2,7 +2,6 @@
 var app = angular.module('wildAnimals', []);
 app.controller('wildAnimalsController', function ($scope, $http) {
 
-    $scope.searchResult = [];
     $scope.queryType = '';
     $scope.isSearching = false;
 
@@ -15,7 +14,10 @@ app.controller('wildAnimalsController', function ($scope, $http) {
             data: $.param(form.serializeArray()),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
-            function success(response) { $scope.searchResult = response.data; },
+            function success(response) {
+                $scope.searchResult = response.data;
+                form.trigger("reset");
+            },
             function error(response) { alert(response); })
     }
 
