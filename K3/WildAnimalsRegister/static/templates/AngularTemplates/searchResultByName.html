@@ -1,0 +1,39 @@
+<div ng-if="searchResult.length == 0">
+    Mingi lisatingimus, et õelda, et tulemust ei ole
+</div>
+<div ng-if="searchResult.length != 0" ng-repeat="a in searchResult">
+    <div class="animalData">
+        <div class="dataHeader">Looma info</div>
+        <div class="dataContent">
+            <div class="dataRow">
+                <label class="dataLabel"> Looma nimi: </label>
+                <input type="text" value="{{ a.name }}" disabled>
+            </div>
+            <div class="dataRow">
+                <label class="dataLabel"> Looma liik: </label>
+                <div class="dataLabel">{{ a.species }}</div>
+                <input type="text" value="{{ a.species }}">
+            </div>
+        </div>
+    </div>
+    <div class="animalData">
+        <div class="dataHeader">Looma nägemise info</div>
+        <div class="dataContent">
+            <div class="dataSection" ng-repeat="info in a.observationInfo">
+                <div class="sectionHeader">Vaste nr. {{ $index+1 }}</div>
+                <div class="dataRow">
+                    <label class="dataLabel"> Kuupäev: </label>
+                    <input type="text" value="{{ info.datetime }}">
+                </div>
+                <div class="dataRow">
+                    <label class="dataLabel"> Asukoht: </label>
+                    <input type="text" value="{{ info.location }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buttonBar">
+        <button class="btn btn-default removeAnimalBtn">Kustuta loom registrist</button>
+        <button ng-clicked="" class="btn btn-default changeAnimalDataBtn">Muuda looma andmeid</button>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}">
+</head>
+<body>
+
+<div ng-app="wildAnimals" ng-cloak class="container text-center col-lg-5 container-center">
+    <div ng-controller="wildAnimalsController" class="card">
+        <div class="card-block">
+            <h4 class="card-title">Metsloomade register</h4>
+
+            <div id="queryTypes">
+                <button class="btn btn-default searchButton" ng-click="setQueryType('byName')">Otsi looma nime järgi</button>
+                <button class="btn btn-default searchButton" ng-click="setQueryType('bySpecies')">Otsi looma liigi järgi</button>
+                <button class="btn btn-default searchButton" ng-click="setQueryType('byLocation')">Otsi looma asukoha järgi</button>
+            </div>
+
+            <div ng-if="getQueryType() == 'byName'">
+                <form ng-submit="searchByName($event)" method="POST" id="FormSearchByName">
+                    <div class="row">
+                        <div class="col-lg-6 searchKeyWordInput">
+                            <label for="animalName">Sisesta otsinguks looma nimi</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="animalIcon"><i class="fa fa-paw"></i></span>
+                                <input type="text" class="form-control" id="animalName" name="animalName" aria-describedby="animalIcon">
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <button class="btn btn-default" type="submit">Tee otsing</button>
+                </form>
+            </div>
+
+            <div ng-include="'{% static 'templates/AngularTemplates/searchResultByName.html' %}'"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular-route.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.6.3/angular-messages.js"></script>
+
+<script src="{% static 'angular/script.js' %}"></script>
+
+</body>
+</html>

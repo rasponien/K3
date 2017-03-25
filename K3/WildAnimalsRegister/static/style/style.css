@@ -1,0 +1,82 @@
+.container-center {
+    margin-top: 100px;
+}
+
+#queryTypes {
+    margin: 50px auto;
+    width: 300px;
+    display: inline-block;
+}
+
+.searchButton {
+    margin: 30px auto;
+    width: inherit;
+    height: 50px;
+    background-color: #cbe9d5;
+}
+
+
+
+
+
+
+
+
+.searchKeyWordInput {
+    margin: 0 auto;
+}
+
+.animalData {
+    margin: 30px auto;
+    width: 500px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #ddd;
+}
+.dataHeader {
+    font-size: 22px;
+    font-weight: 500;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: #ccc;
+}
+.dataContent {
+    height: inherit;
+    margin: 30px auto;
+}
+.dataRow {
+    height: 20px;
+    margin: 10px auto;
+    display: inline-block;
+}
+.dataLabel {
+    margin-right: 30px;
+    font-weight: 600;
+    display: inline-block;
+}
+.dataSection {
+    height: 90px;
+    margin: 0px auto 80px auto;
+    display: inline-block;
+}
+.sectionHeader {
+    width: 300px;
+    margin: 10px auto 10px auto;
+    border-bottom: solid;
+    border-color: #aaa;
+    border-width: 1px;
+    font-weight: 400;
+}
+
+.buttonBar {
+    margin: 0 auto;
+    width: 500px;
+}
+
+.removeAnimalBtn {
+    background-color: #ff4051;
+}
+.changeAnimalDataBtn {
+    background-color: #ffc343;
+}
