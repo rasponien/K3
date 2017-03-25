@@ -4,6 +4,8 @@ app.controller('wildAnimalsController', function ($scope, $http) {
 
     $scope.searchResult = [];
     $scope.queryType = '';
+    $scope.isSearching = false;
+
     $scope.searchByName = function(event) {
         event.preventDefault();
         var form = $('#FormSearchByName');
@@ -20,8 +22,14 @@ app.controller('wildAnimalsController', function ($scope, $http) {
     //getters & setters
     $scope.setQueryType = function (queryType) {
         $scope.queryType = queryType;
+        $scope.isSearching = true;
     }
     $scope.getQueryType = function () {
         return $scope.queryType;
+    }
+
+    $scope.showQueryTypes = function() {
+        $scope.queryType = 'none';
+        $scope.isSearching = false;
     }
 });
