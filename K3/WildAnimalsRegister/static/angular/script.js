@@ -2,6 +2,7 @@
 var app = angular.module('wildAnimals', []);
 app.controller('wildAnimalsController', function ($scope, $http) {
 
+    $scope.searchResult = [];
     $scope.queryType = '';
     $scope.isSearching = false;
 
@@ -18,13 +19,16 @@ app.controller('wildAnimalsController', function ($scope, $http) {
                 $scope.searchResult = response.data;
                 form.trigger("reset");
             },
-            function error(response) { alert(response); })
+            function error(response) {
+                alert(response);
+            })
     }
 
     //getters & setters
     $scope.setQueryType = function (queryType) {
         $scope.queryType = queryType;
         $scope.isSearching = true;
+        $scope.searchResult = [];
     }
     $scope.getQueryType = function () {
         return $scope.queryType;

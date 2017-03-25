@@ -19,13 +19,13 @@
             <div class="main-title">Metsloomade register</div>
         </div>
         <div class="main-content">
-            <div ng-hide="isSearching" id="queryTypes">
+            <div ng-show="!isSearching" id="queryTypes">
                 <button class="button" ng-click="setQueryType('byName')">Otsi looma nime järgi</button>
                 <button class="button" ng-click="setQueryType('bySpecies')">Otsi looma liigi järgi</button>
                 <button class="button" ng-click="setQueryType('byLocation')">Otsi looma asukoha järgi</button>
             </div>
 
-            <div class="searchForm" ng-show="getQueryType() == 'byName'">
+            <div ng-hide="searchResult.length != 0" class="searchForm" ng-show="getQueryType() == 'byName'">
                 <form ng-submit="searchByName($event)" method="POST" id="FormSearchByName">
                     <label for="animalName">Sisesta otsinguks looma nimi</label>
                     <div class="input-group">

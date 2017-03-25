@@ -1,4 +1,4 @@
-<div class="noResult" ng-if="searchResult.length == 0">
+<div class="animalData" ng-if="searchResult.length == 0">
     Sellise nimelist looma ei leitud!
 </div>
 <div ng-if="searchResult.length != 0" ng-repeat="a in searchResult">
@@ -7,12 +7,11 @@
         <div class="dataContent">
             <div class="dataRow">
                 <label class="dataLabel"> Looma nimi: </label>
-                <input type="text" value="{{ a.name }}" disabled>
+                <div class="dataLabel">{{ a.name }}</div>
             </div>
             <div class="dataRow">
                 <label class="dataLabel"> Looma liik: </label>
                 <div class="dataLabel">{{ a.species }}</div>
-                <input type="text" value="{{ a.species }}">
             </div>
         </div>
     </div>
@@ -23,11 +22,11 @@
                 <div class="sectionHeader">Vaste nr. {{ $index+1 }}</div>
                 <div class="dataRow">
                     <label class="dataLabel"> Kuupäev: </label>
-                    <input type="text" value="{{ info.datetime }}">
+                    <div class="dataLabel">{{ info.datetime }}</div>
                 </div>
                 <div class="dataRow">
                     <label class="dataLabel"> Asukoht: </label>
-                    <input type="text" value="{{ info.location }}">
+                    <div class="dataLabel">{{ info.location }}</div>
                 </div>
             </div>
         </div>
