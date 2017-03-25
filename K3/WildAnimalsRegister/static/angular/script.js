@@ -1,5 +1,19 @@
 /** Created by carlcustav on 3/21/2017. */
-var app = angular.module('wildAnimals', []);
+var app = angular.module('wildAnimals', ['ngRoute']);
+app.config([ '$locationProvider', function ($locationProvider) {
+    $locationProvider.hashPrefix('');
+} ]);
+app.config(function ($routeProvider, $locationProvider) {
+    $routeProvider
+        .when("/add", {
+            template: "hello",
+            controller: 'wildAnimalsController'
+        })
+        .otherwise({
+            redirectTo: '/'
+        });
+});
+
 app.controller('wildAnimalsController', function ($scope, $http) {
 
     $scope.searchResult = [];
