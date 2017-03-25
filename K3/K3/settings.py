@@ -55,7 +55,11 @@ ROOT_URLCONF = 'K3.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+<<<<<<< HEAD
         'DIRS': [os.path.join(BASE_DIR, 'WildAnimalsRegister/static/templates')]
+=======
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+>>>>>>> c067a0d717779ebd6f92b63ce6a8e6c03146fe58
         ,
         'APP_DIRS': True,
         'OPTIONS': {

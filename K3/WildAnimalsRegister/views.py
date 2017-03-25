@@ -25,6 +25,10 @@ def searchByName(request):
             })
     return JsonResponse(result, safe=False)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c067a0d717779ebd6f92b63ce6a8e6c03146fe58
 def findObservationInfo(id):
     observationData = []
     for record in AnimalObservation.objects.filter(animal_id = id):
@@ -32,4 +36,8 @@ def findObservationInfo(id):
             'location' : record.last_seen_location,
             'datetime' : str(record.last_seen_time)
         })
+<<<<<<< HEAD
     return observationData
+=======
+    return observationData
+>>>>>>> c067a0d717779ebd6f92b63ce6a8e6c03146fe58

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}">
+</head>
+<body>
+
+<div ng-app="wildAnimals" ng-cloak class="container text-center col-lg-5 container-center">
+    <div ng-controller="wildAnimalsController" class="card">
+        <div class="card-block">
+            <h4 class="card-title">Metsloomade register</h4>
+
+            <div id="queryTypes">
+                <button class="btn btn-default" ng-click="queryType='byName'">Otsi looma nime järgi</button>
+                <button class="btn btn-default" ng-click="queryType='bySpecies'">Otsi looma liigi järgi</button>
+                <button class="btn btn-default" ng-click="queryType='byLocation'">Otsi looma asukoha järgi</button>
+            </div>
+
+            <div ng-if="queryType == 'byName'">
+                <form ng-submit="searchByName($event)" method="POST" id="FormSearchByName">
+                    <div class="row">
+                        <div class="col-lg-6 searchKeyWordInput">
+                            <label for="animalName">Sisesta otsinguks looma nimi</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="animalIcon"><i class="fa fa-paw"></i></span>
+                                <input type="text" class="form-control" id="animalName" name="animalName" aria-describedby="animalIcon">
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <button class="btn btn-default" type="submit">Tee otsing</button>
+                </form>
+            </div>
+
+            {% verbatim %}
+            <div ng-if="searchResult.length == 0">
+                Mingi lisatingimus, et õelda, et tulemust ei ole
+            </div>
+            <div ng-if="searchResult.length != 0" ng-repeat="a in searchResult">
+                <div class="animalData">
+                    <div class="dataHeader">Looma info</div>
+                    <div class="dataContent">
+                        <div class="dataRow">
+                            <label class="dataLabel"> Looma nimi: </label>
+                            <input type="text" value="{{ a.name }}" disabled>
+                        </div>
+                        <div class="dataRow">
+                            <label class="dataLabel"> Looma liik: </label>
+                            <input type="text" value="{{ a.species }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="animalData">
+                    <div class="dataHeader">Looma nägemise info</div>
+                    <div class="dataContent">
+                        <div class="dataSection" ng-repeat="info in a.observationInfo">
+                            <div class="sectionHeader">Vaste nr. {{ $index+1 }}</div>
+                            <div class="dataRow">
+                                <label class="dataLabel"> Kuupäev: </label>
+                                <input type="text" value="{{ info.datetime }}">
+                            </div>
+                            <div class="dataRow">
+                                <label class="dataLabel"> Asukoht: </label>
+                                <input type="text" value="{{ info.location }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonBar">
+                    <button class="btn btn-default removeAnimalBtn" type="submit">Kustuta loom registrist</button>
+                    <button class="btn btn-default changeAnimalDataBtn" type="submit">Muuda looma andmeid</button>
+                </div>
+            </div>
+            {% endverbatim %}
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular-route.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.6.3/angular-messages.js"></script>
+
+<script src="{% static 'angular/script.js' %}"></script>
+
+</body>
+</html>
