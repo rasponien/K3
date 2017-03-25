@@ -4,11 +4,10 @@ from .models import AnimalObservation, Animal
 from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
-
-    # if 'animalName' in request.POST:
-    #     searchByName(request)
-
     return render(request, 'index.html')
+
+def search(request):
+    return render(request, 'search.html')
 
 @csrf_exempt
 def searchByName(request):
@@ -33,3 +32,4 @@ def findObservationInfo(id):
             'datetime' : str(record.last_seen_time)
         })
     return observationData
+

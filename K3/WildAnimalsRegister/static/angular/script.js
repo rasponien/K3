@@ -1,20 +1,9 @@
 /** Created by carlcustav on 3/21/2017. */
-var app = angular.module('wildAnimals', ['ngRoute']);
-app.config(function ($routeProvider) {
-    $routeProvider
-        .when("/search", {
-            templateUrl: "templates/lisamine.html",
-            controller: 'DogsController'
-        })
-        .otherwise({
-            redirectTo: '/'
-        });
-});
+var app = angular.module('wildAnimals', []);
 app.controller('wildAnimalsController', function ($scope, $http) {
 
     $scope.searchResult = [];
     $scope.queryType = '';
-
     $scope.searchByName = function(event) {
         event.preventDefault();
         var form = $('#FormSearchByName');
@@ -29,12 +18,10 @@ app.controller('wildAnimalsController', function ($scope, $http) {
     }
 
     //getters & setters
-     $scope.setQueryType = function (queryType) {
+    $scope.setQueryType = function (queryType) {
         $scope.queryType = queryType;
     }
     $scope.getQueryType = function () {
         return $scope.queryType;
     }
-
-
 });
