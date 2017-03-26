@@ -1,5 +1,4 @@
-<div class="animalData" ng-show="isMakingQuery && searchResult.length == 0">
-    {{ isSearching }}
+<div class="noResult" ng-show="isMakingQuery && searchResult.length == 0">
     Sellise nimelist looma ei leitud!
 </div>
 <div ng-show="searchResult.length != 0" ng-repeat="a in searchResult">
@@ -8,11 +7,11 @@
         <div class="dataContent">
             <div class="dataRow">
                 <label class="dataLabel"> Looma nimi: </label>
-                <div class="dataLabel">{{ a.name }}</div>
+                <div class="data">{{ a.name }}</div>
             </div>
             <div class="dataRow">
                 <label class="dataLabel"> Looma liik: </label>
-                <div class="dataLabel">{{ a.species }}</div>
+                <div class="data">{{ a.species }}</div>
             </div>
         </div>
     </div>
@@ -23,17 +22,17 @@
                 <div class="sectionHeader">Vaste nr. {{ $index+1 }}</div>
                 <div class="dataRow">
                     <label class="dataLabel"> Kuupäev: </label>
-                    <div class="dataLabel">{{ info.datetime }}</div>
+                    <div class="data">{{ info.datetime }}</div>
                 </div>
                 <div class="dataRow">
                     <label class="dataLabel"> Asukoht: </label>
-                    <div class="dataLabel">{{ info.location }}</div>
+                    <div class="data">{{ info.location }}</div>
                 </div>
             </div>
         </div>
     </div>
     <div class="buttonBar">
-        <button class="btn btn-default removeAnimalBtn">Kustuta loom registrist</button>
-        <button ng-clicked="" class="btn btn-default changeAnimalDataBtn">Muuda looma andmeid</button>
+        <button class="button button-data removeAnimalBtn">Kustuta loom registrist</button>
+        <button class="button button-data changeAnimalDataBtn">Muuda looma andmeid</button>
     </div>
 </div>
