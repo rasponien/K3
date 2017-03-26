@@ -1,7 +1,8 @@
-<div class="animalData" ng-if="searchResult.length == 0">
+<div class="animalData" ng-show="isMakingQuery && searchResult.length == 0">
+    {{ isSearching }}
     Sellise nimelist looma ei leitud!
 </div>
-<div ng-if="searchResult.length != 0" ng-repeat="a in searchResult">
+<div ng-show="searchResult.length != 0" ng-repeat="a in searchResult">
     <div class="animalData">
         <div class="dataHeader">Looma info</div>
         <div class="dataContent">

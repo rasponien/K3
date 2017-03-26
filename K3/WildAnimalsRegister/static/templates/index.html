@@ -15,32 +15,16 @@
 
     <div ng-controller="wildAnimalsController" class="main">
         <div class="main-header">
-            <button class="button back" ng-click="showQueryTypes()">Tagasi esilehele</button>
+            <a ng-click="setBackToDefault()" class="button back" href="#/">Tagasi esilehele</a>
             <div class="main-title">Metsloomade register</div>
         </div>
         <div class="main-content">
-            <div ng-show="!isSearching" id="queryTypes">
-
-                <a href="#/add">vajuta siia</a>
-                <div ng-view></div>
-
-                <button class="button" ng-click="setQueryType('byName')">Otsi looma nime järgi</button>
-                <button class="button" ng-click="setQueryType('bySpecies')">Otsi looma liigi järgi</button>
-                <button class="button" ng-click="setQueryType('byLocation')">Otsi looma asukoha järgi</button>
+            <div ng-hide="isSearching" id="queryTypes">
+                <a ng-click="isSearching=true" class="button btn-search" href="#/searchByName">Otsi looma nime järgi</a>
+                <a ng-click="isSearching=true" class="button btn-search" href="#/searchBySpecies">Otsi looma nime järgi</a>
+                <a ng-click="isSearching=true" class="button btn-search" href="#/searchByLocation">Otsi looma nime järgi</a>
             </div>
-
-            <div ng-hide="searchResult.length == 0" class="searchForm" ng-show="getQueryType() == 'byName'">
-                <form ng-submit="searchByName($event)" method="POST" id="FormSearchByName">
-                    <label for="animalName">Sisesta otsinguks looma nimi</label>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="animalIcon"><i class="fa fa-paw"></i></span>
-                        <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName" aria-describedby="animalIcon">
-                        <button class="button search" type="submit">Tee otsing</button>
-                    </div>
-                </form>
-            </div>
-
-            <div ng-include="'{% static 'templates/AngularTemplates/searchResultByName.html' %}'"></div>
+            <div ng-view></div>
 
         </div>
 

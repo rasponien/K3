@@ -5,8 +5,8 @@ app.config([ '$locationProvider', function ($locationProvider) {
 } ]);
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
-        .when("/add", {
-            template: "hello",
+        .when("/searchByName", {
+            templateUrl: "/static/templates/AngularTemplates/search.html",
             controller: 'wildAnimalsController'
         })
         .otherwise({
@@ -17,8 +17,8 @@ app.config(function ($routeProvider, $locationProvider) {
 app.controller('wildAnimalsController', function ($scope, $http) {
 
     $scope.searchResult = [];
-    $scope.queryType = '';
     $scope.isSearching = false;
+    $scope.isMakingQuery = false;
 
     $scope.searchByName = function(event) {
         event.preventDefault();
@@ -38,18 +38,8 @@ app.controller('wildAnimalsController', function ($scope, $http) {
             })
     }
 
-    //getters & setters
-    $scope.setQueryType = function (queryType) {
-        $scope.queryType = queryType;
-        $scope.isSearching = true;
-        $scope.searchResult = [];
-    }
-    $scope.getQueryType = function () {
-        return $scope.queryType;
-    }
-
-    $scope.showQueryTypes = function() {
-        $scope.queryType = 'none';
+    $scope.setBackToDefault = function() {
         $scope.isSearching = false;
+        $scope.isMakingQuery = false;
     }
 });

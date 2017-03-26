@@ -5,6 +5,8 @@
     background-color: #cbe9d5;
     border: none;
     border-radius: 4px;
+    text-align: center;
+    color: #000;
 
     -o-transition:color .2s ease-out, background .2s ease-in;
     -ms-transition:color .2s ease-out, background .2s ease-in;
@@ -13,9 +15,19 @@
     transition:color .2s ease-out, background .2s ease-in;
 }
 .button:focus, .button:hover {
+    color: #000;
+    text-decoration: none;
     outline: none;
     background-color: #a8e9be;
 }
+
+.btn-search {
+    display: block;
+    line-height: 45px;
+}
+
+
+
 
 
 
@@ -88,7 +100,7 @@
     width: 50%;
     height: auto;
     min-height: 500px;
-    margin: 5% auto 0 auto;
+    margin: 5% auto;
     border: solid;
     border-radius: 5px;
     border-color: #aaa;
@@ -111,7 +123,7 @@
     width: 150px;
     height: inherit;
     margin: 0;
-    padding: 0;
+    line-height: 70px;
 }
 
 .search {
