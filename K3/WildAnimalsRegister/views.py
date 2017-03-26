@@ -9,11 +9,28 @@ def index(request):
 @csrf_exempt
 def searchByName(request):
     animals = Animal.objects.get_queryset()
+    print("Search by name :",animals)
     searchKeyWord = request.POST['animalName']
     result = []
 
     for animal in animals:
         if animal.name == searchKeyWord:
+            result.append({
+                'name' : animal.name,
+                'species' : animal.species,
+                'observationInfo' : findObservationInfo(animal.id)
+            })
+    return JsonResponse(result, safe=False)
+
+@csrf_exempt
+def searchBySpecies(request):
+    animals = Animal.objects.get_queryset()
+    print("Search by species :", animals)
+    searchKeyWord = request.POST['animalSpecies']
+    result = []
+
+    for animal in animals:
+        if animal.species == searchKeyWord:
             result.append({
                 'name' : animal.name,
                 'species' : animal.species,
