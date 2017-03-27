@@ -1,26 +1,26 @@
 <div class="noResult" ng-show="searchForm.$submitted && searchResult.length == 0">
     Sellise nimelist looma ei leitud!
 </div>
-<div ng-show="searchResult.length > 0" ng-repeat="a in searchResult">
+<div ng-show="searchResult.length > 0"">
     <div class="dataSeparator">
-    <div class="animalHeader">{{ a.name }}</div>
+    <div class="animalHeader">{{ getCurrentAnimal().name }}</div>
     <div class="animalData">
         <div class="dataHeader">Looma info</div>
         <div class="dataContent">
             <div class="dataRow">
                 <label class="dataLabel"> Looma nimi: </label>
-                <div class="data">{{ a.name }}</div>
+                <div class="data">{{ getCurrentAnimal().name }}</div>
             </div>
             <div class="dataRow">
                 <label class="dataLabel"> Looma liik: </label>
-                <div class="data">{{ a.species }}</div>
+                <div class="data">{{ getCurrentAnimal().species }}</div>
             </div>
         </div>
     </div>
     <div class="animalData">
         <div class="dataHeader">Looma nägemise info</div>
         <div class="dataContent">
-            <div class="dataSection" ng-repeat="info in a.observationInfo">
+            <div class="dataSection" ng-repeat="info in getCurrentAnimal().observationInfo">
                 <div class="sectionHeader">Vaste nr.{{ $index+1 }}</div>
                 <div class="dataRow">
                     <label class="dataLabel"> Kuupäev: </label>
@@ -34,8 +34,8 @@
         </div>
     </div>
     <div class="buttonBar">
-        <button class="button button-data removeAnimalBtn">Kustuta loom registrist</button>
-        <button class="button button-data changeAnimalDataBtn">Muuda looma andmeid</button>
+        <button ng-click="removeAnimal()" class="button button-data removeAnimalBtn">Kustuta loom registrist</button>
+        <button ng-click="changeAnimalData($event)" class="button button-data changeAnimalDataBtn">Muuda looma andmeid</button>
     </div>
     </div>
 </div>

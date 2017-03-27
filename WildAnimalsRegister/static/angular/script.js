@@ -28,6 +28,8 @@ app.run(function ($rootScope) {
     $rootScope.inputGlyphicon = "";
     $rootScope.includedTemplatePath = "";
 
+    $rootScope.currentAnimal = [];
+
 });
 
 app.config(function ($routeProvider, $locationProvider) {
@@ -42,7 +44,7 @@ app.config(function ($routeProvider, $locationProvider) {
         });
 });
 
-app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters) {
+app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location, $templateCache) {
 
     $scope.searchResult = [];
     $scope.makeQuery = function(event) {
@@ -69,6 +71,26 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             })
     }
 
+    $scope.removeAnimal = function() {
+
+        console.log($scope.searchResult[0].name);
+    /*
+        $http({
+            method: "POST",
+            url: queryUrl,
+            data: $.param(form.serializeArray()),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+            function success(response) {
+                $scope.searchResult = response.data;
+                form.trigger("reset");
+            },
+            function error(response) {
+                alert(response);
+            })
+            */
+    }
+
     /* Setters and getters */
     $scope.setQueryType = function(queryType) { $rootScope.queryType = queryType;}
     $scope.getQueryType = function() { return $rootScope.queryType; }
@@ -81,6 +103,10 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
 
     $scope.setIncludedTemplatePath = function(includedTemplatePath) { $rootScope.includedTemplatePath = includedTemplatePath; }
     $scope.getIncludedTemplatePath = function() { return $rootScope.includedTemplatePath; }
+
+    $scope.setCurrentAnimal = function(currentAnimal) { $rootScope.currentAnimal = currentAnimal; }
+    $scope.getCurrentAnimal = function() { return $rootScope.currentAnimal; }
+
 
 
     /* Query configuring and reseting. */
@@ -96,5 +122,13 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         $scope.setInputGlyphicon("");
         $scope.setIncludedTemplatePath("");
     }
+
+
+    $scope.directToAnimalDetails = function($event, view) {
+        $scope.setCurrentAnimal($scope.searchResult[$event.target.id]);
+        $scope.makeQueryConfigurations('name');
+        $location.path(view);
+    }
+
 });
 
