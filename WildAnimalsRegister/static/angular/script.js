@@ -63,6 +63,7 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
             function success(response) {
+                if (response.data.length == 1) {$scope.setCurrentAnimal(response.data[0])}
                 $scope.searchResult = response.data;
                 form.trigger("reset");
             },
@@ -71,14 +72,13 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             })
     }
 
-    $scope.removeAnimal = function() {
+        $scope.removeAnimal = function() {
 
         console.log($scope.searchResult[0].name);
-    /*
         $http({
             method: "POST",
-            url: queryUrl,
-            data: $.param(form.serializeArray()),
+            url: "removeAnimal/",
+            data: $.param({ animalName : $scope.searchResult[0].name}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
             function success(response) {
@@ -88,8 +88,9 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             function error(response) {
                 alert(response);
             })
-            */
     }
+
+
 
     /* Setters and getters */
     $scope.setQueryType = function(queryType) { $rootScope.queryType = queryType;}

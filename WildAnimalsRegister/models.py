@@ -7,7 +7,7 @@ class Animal(models.Model):
         return self.name
 
 class AnimalObservation(models.Model):
-    animal_id = models.ForeignKey(Animal)
+    animal_id = models.ForeignKey(Animal,on_delete=models.CASCADE)
     last_seen_location = models.CharField(max_length=255)
     last_seen_time = models.DateTimeField()
 
