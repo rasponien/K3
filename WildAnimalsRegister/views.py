@@ -9,7 +9,6 @@ def index(request):
 @csrf_exempt
 def searchByName(request):
     animals = Animal.objects.get_queryset()
-    print(request.POST)
     searchKeyWord = request.POST['searchParameter']
     result = []
 

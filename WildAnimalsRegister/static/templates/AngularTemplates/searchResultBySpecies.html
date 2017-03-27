@@ -2,7 +2,9 @@
     Sellist liiki loomi ei leitud!
 </div>
 <div ng-show="searchResult.length != 0" ng-repeat="a in searchResult">
-    <div class="animalData">
+    <div class="dataSeparator">
+        <div class="animalHeader">{{ a.name }}</div>
+        <div class="animalData">
         <div class="dataHeader">Looma info</div>
         <div class="dataContent">
             <div class="dataRow">
@@ -14,8 +16,8 @@
                 <div class="data">{{ a.species }}</div>
             </div>
         </div>
-    </div>
-    <div class="animalData">
+        </div>
+        <div class="animalData">
         <div class="dataHeader">Looma nägemise info</div>
         <div class="dataContent">
             <div class="dataSection" ng-repeat="info in a.observationInfo">
@@ -30,5 +32,7 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </div>
+

@@ -10,3 +10,4 @@ class AnimalObservation(models.Model):
     animal_id = models.ForeignKey(Animal)
     last_seen_location = models.CharField(max_length=255)
     last_seen_time = models.DateTimeField()
+

@@ -2,6 +2,8 @@
     Sellise nimelist looma ei leitud!
 </div>
 <div ng-show="searchResult.length > 0" ng-repeat="a in searchResult">
+    <div class="dataSeparator">
+    <div class="animalHeader">{{ a.name }}</div>
     <div class="animalData">
         <div class="dataHeader">Looma info</div>
         <div class="dataContent">
@@ -34,5 +36,6 @@
     <div class="buttonBar">
         <button class="button button-data removeAnimalBtn">Kustuta loom registrist</button>
         <button class="button button-data changeAnimalDataBtn">Muuda looma andmeid</button>
+    </div>
     </div>
 </div>
