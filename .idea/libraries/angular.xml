@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="angular" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/WildAnimalsRegister/static/angular" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/WildAnimalsRegister/static/angular" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

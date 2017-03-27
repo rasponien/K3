@@ -1,0 +1,186 @@
+.button {
+    margin: 30px auto;
+    width: inherit;
+    height: 50px;
+    background-color: #cbe9d5;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    color: #000;
+
+    -o-transition:color .2s ease-out, background .2s ease-in;
+    -ms-transition:color .2s ease-out, background .2s ease-in;
+    -moz-transition:color .2s ease-out, background .2s ease-in;
+    -webkit-transition:color .2s ease-out, background .2s ease-in;
+    transition:color .2s ease-out, background .2s ease-in;
+}
+.button:focus, .button:hover {
+    color: #000;
+    text-decoration: none;
+    outline: none;
+    background-color: #a8e9be;
+}
+
+.btn-search {
+    display: block;
+    line-height: 45px;
+}
+
+.button-data {
+    width: 350px;
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+
+
+
+
+
+
+.searchKeyWordInput {
+    margin: 0 auto;
+}
+
+.animalData {
+    margin: 30px auto;
+    width: 700px;
+    height: auto;
+    min-height: 100px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #ddd;
+    text-align: center;
+}
+.dataHeader {
+    font-size: 22px;
+    font-weight: 500;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: #ccc;
+}
+.dataContent {
+    height: inherit;
+    margin: 30px auto;
+}
+.dataRow {
+    margin: 10px auto;
+    display: inline-block;
+}
+.dataLabel {
+    margin: 0 30px;
+    width: 100px;
+    font-weight: 600;
+    float: left;
+}
+.data {
+    margin: 0 30px;
+    width: 160px;
+    float: left;
+}
+
+
+
+
+.dataSection {
+    height: 90px;
+    margin: 0px auto 80px auto;
+    display: inline-block;
+}
+.sectionHeader {
+    width: 300px;
+    margin: 10px auto 10px auto;
+    border-bottom: solid;
+    border-color: #aaa;
+    border-width: 1px;
+    font-weight: 400;
+}
+
+.buttonBar {
+    margin: -30px 125px 0 125px;
+    height: 80px;
+}
+
+.removeAnimalBtn {
+    background-color: #ff4051;
+}
+.changeAnimalDataBtn {
+    background-color: #ffc343;
+}
+
+
+.main {
+    width: 50%;
+    height: auto;
+    min-height: 500px;
+    margin: 5% auto;
+    border: solid;
+    border-radius: 5px;
+    border-color: #aaa;
+    border-width: 1px;
+}
+
+
+/* header */
+.main-header {
+    width: 950px;
+    height: 80px;
+    margin: 0;
+    border: solid;
+    border-color: #aaa;
+    border-width: 0 0 1px 0;
+}
+
+.back {
+    float: left;
+    width: 150px;
+    height: inherit;
+    margin: 0;
+    line-height: 70px;
+}
+
+.search {
+    margin: 0;
+    width: 95px;
+    height: 40px;
+}
+
+.main-title {
+    float: left;
+    height: 29px;
+    width: 800px;
+    text-align: center;
+    margin: 25px 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* content */
+.main-content {
+    width: 950px;
+    min-height: inherit;
+    display: inline-block;
+}
+
+#queryTypes {
+    margin: 50px auto;
+    width: 300px;
+}
+
+.searchForm {
+    width: 400px;
+    margin: 60px auto;
+    text-align: center;
+}
+
+.noResult {
+    margin: 210px auto;
+    display: block;
+    width: 400px;
+    height: 80px;
+    text-align: center;
+    line-height: 70px;
+    font-size: 25px;
+}
