@@ -29,6 +29,7 @@ app.run(function ($rootScope) {
     $rootScope.includedTemplatePath = "";
 
     $rootScope.currentAnimal = [];
+    $rootScope.changingAnimalData = false;
 
 });
 
@@ -44,7 +45,7 @@ app.config(function ($routeProvider, $locationProvider) {
         });
 });
 
-app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location, $templateCache) {
+app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location) {
 
     $scope.searchResult = [];
     $scope.makeQuery = function(event) {
@@ -63,7 +64,9 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
             function success(response) {
-                if (response.data.length == 1) {$scope.setCurrentAnimal(response.data[0])}
+                if (response.data.length == 1 && $scope.getQueryType() == configurationParameters['name']['queryType']) {
+                    $scope.setCurrentAnimal(response.data[0])
+                }
                 $scope.searchResult = response.data;
                 form.trigger("reset");
             },
@@ -72,9 +75,8 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             })
     }
 
-        $scope.removeAnimal = function() {
+    $scope.removeAnimal = function() {
 
-        console.log($scope.searchResult[0].name);
         $http({
             method: "POST",
             url: "removeAnimal/",
@@ -82,13 +84,22 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
             function success(response) {
-                $scope.searchResult = response.data;
-                form.trigger("reset");
+                $scope.resetToDefault();
+                $location.path('/');
             },
             function error(response) {
                 alert(response);
             })
     }
+
+    $scope.changeAnimalData = function() { $scope.setChangingAnimalData(true); }
+
+    $scope.applyDataChanges = function($event) {
+                console.log(new Date(response.data[0].observationInfo[0].datetime))
+    }
+
+
+
 
 
 
@@ -108,6 +119,9 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
     $scope.setCurrentAnimal = function(currentAnimal) { $rootScope.currentAnimal = currentAnimal; }
     $scope.getCurrentAnimal = function() { return $rootScope.currentAnimal; }
 
+    $scope.setChangingAnimalData = function(changingAnimalData) { $rootScope.changingAnimalData = changingAnimalData; }
+    $scope.getChangingAnimalData = function() { return $rootScope.changingAnimalData; }
+
 
 
     /* Query configuring and reseting. */
@@ -122,6 +136,7 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         $scope.setLabelDescription("");
         $scope.setInputGlyphicon("");
         $scope.setIncludedTemplatePath("");
+        $scope.setChangingAnimalData(false);
     }
 
 

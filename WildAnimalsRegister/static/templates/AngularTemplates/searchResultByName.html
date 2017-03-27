@@ -4,38 +4,45 @@
 <div ng-show="searchResult.length > 0"">
     <div class="dataSeparator">
     <div class="animalHeader">{{ getCurrentAnimal().name }}</div>
-    <div class="animalData">
-        <div class="dataHeader">Looma info</div>
-        <div class="dataContent">
-            <div class="dataRow">
-                <label class="dataLabel"> Looma nimi: </label>
-                <div class="data">{{ getCurrentAnimal().name }}</div>
-            </div>
-            <div class="dataRow">
-                <label class="dataLabel"> Looma liik: </label>
-                <div class="data">{{ getCurrentAnimal().species }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="animalData">
-        <div class="dataHeader">Looma nägemise info</div>
-        <div class="dataContent">
-            <div class="dataSection" ng-repeat="info in getCurrentAnimal().observationInfo">
-                <div class="sectionHeader">Vaste nr.{{ $index+1 }}</div>
+    <form ng-submit="applyDataChanges($event)">
+        <div class="animalData">
+            <div class="dataHeader">Looma info</div>
+            <div class="dataContent">
                 <div class="dataRow">
-                    <label class="dataLabel"> Kuupäev: </label>
-                    <div class="data">{{ info.datetime }}</div>
+                    <label for="animalName" class="dataLabel"> Looma nimi: </label>
+                    <input ng-show="getChangingAnimalData()==true" id="animalName" type="text" value="{{ getCurrentAnimal().name }}">
+                    <div ng-show="getChangingAnimalData()==false" class="data">{{ getCurrentAnimal().name }}</div>
                 </div>
                 <div class="dataRow">
-                    <label class="dataLabel"> Asukoht: </label>
-                    <div class="data">{{ info.location }}</div>
+                    <label for="animalSpecies" class="dataLabel"> Looma liik: </label>
+                    <input ng-show="getChangingAnimalData()==true" id="animalSpecies" type="text" value="{{ getCurrentAnimal().species }}">
+                    <div ng-show="getChangingAnimalData()==false" class="data">{{ getCurrentAnimal().species }}</div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="buttonBar">
-        <button ng-click="removeAnimal()" class="button button-data removeAnimalBtn">Kustuta loom registrist</button>
-        <button ng-click="changeAnimalData($event)" class="button button-data changeAnimalDataBtn">Muuda looma andmeid</button>
-    </div>
+        <div class="animalData">
+            <div class="dataHeader">Looma nägemise info</div>
+            <div class="dataContent">
+                <div class="dataSection" ng-repeat="info in getCurrentAnimal().observationInfo">
+                    <div class="sectionHeader">Vaste nr.{{ $index+1 }}</div>
+                    <div class="dataRow">
+                        <label for="last_seen_time" class="dataLabel"> Kuupäev: </label>
+                        <input ng-show="getChangingAnimalData()==true" id="last_seen_time" type="datetime" value="{{ info.datetime }}">
+                        <div ng-show="getChangingAnimalData()==false" class="data">{{ info.datetime }}</div>
+                    </div>
+                    <div class="dataRow">
+                        <label for="last_seen_location" class="dataLabel"> Asukoht: </label>
+                        <input ng-show="getChangingAnimalData()==true" id="last_seen_location" type="text" value="{{ info.location }}">
+                        <div ng-show="getChangingAnimalData()==false" class="data">{{ info.location }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button ng-show="getChangingAnimalData()==true" type="submit" class="button button-data submitChanges">Kinnita tehtud muudatused</button>
+    </form>
+        <div ng-show="getChangingAnimalData()==false" class="buttonBar">
+            <button ng-click="removeAnimal()" class="button button-data removeAnimalBtn">Kustuta loom registrist</button>
+            <button ng-click="changeAnimalData()" class="button button-data changeAnimalDataBtn">Muuda looma andmeid</button>
+        </div>
     </div>
 </div>
