@@ -2,7 +2,7 @@
     margin: 30px auto;
     width: inherit;
     height: 50px;
-    background-color: #cbe9d5;
+    background-color: #82e9b0;
     border: none;
     border-radius: 4px;
     text-align: center;
@@ -18,7 +18,7 @@
     color: #000;
     text-decoration: none;
     outline: none;
-    background-color: #a8e9be;
+    background-color: #3fa;
 }
 
 .btn-search {
@@ -110,6 +110,11 @@
 }
 .changeAnimalDataBtn {
     background-color: #ffc343;
+}
+.submitChanges {
+    background-color: #3fbd3e;
+    width: 702px;
+    margin: -70px auto;
 }
 
 
