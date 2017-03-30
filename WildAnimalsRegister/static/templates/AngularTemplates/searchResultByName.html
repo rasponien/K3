@@ -27,7 +27,7 @@
                     <div class="sectionHeader">Vaste nr.{{ $index+1 }}</div>
                     <div class="dataRow">
                         <label for="last_seen_time" class="dataLabel"> Kuupäev: </label>
-                        <input ng-show="getChangingAnimalData()==true" id="last_seen_time" type="datetime" value="{{ info.datetime }}">
+                        <input ng-show="getChangingAnimalData()==true" placeholder="yyyy-MM-ddTHH:mm:ss" ng-model="info.datetime" min="2001-01-01T00:00:00" max="2013-12-31T00:00:00" id="last_seen_time" type="datetime-local">
                         <div ng-show="getChangingAnimalData()==false" class="data">{{ info.datetime }}</div>
                     </div>
                     <div class="dataRow">

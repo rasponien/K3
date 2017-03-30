@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import AnimalObservation, Animal
 from django.views.decorators.csrf import csrf_exempt
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from datetime import datetime
+from django.http import HttpResponse
 
 def index(request):
     return render(request, 'index.html')
@@ -14,6 +18,7 @@ def searchByName(request):
 
     for animal in animals:
         if animal.name == searchKeyWord:
+            #print(type(findObservationInfo(animal.id)[0]['datetime']))
             result.append({
                 'name' : animal.name,
                 'species' : animal.species,
@@ -59,14 +64,11 @@ def removeAnimal(request):
 
 
 
-
-
 def findObservationInfo(id):
     observationData = []
     for record in AnimalObservation.objects.filter(animal_id = id):
         observationData.append({
             'location' : record.last_seen_location,
-            'datetime' : str(record.last_seen_time)
+            'datetime' : record.last_seen_time
         })
     return observationData
-

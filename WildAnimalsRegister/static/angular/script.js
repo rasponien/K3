@@ -5,19 +5,22 @@ app.constant('configurationParameters', {
         queryType : "name",
         labelDescription : "Sisesta otsinguks looma nimi",
         inputGlyphicon : "fa fa-paw",
-        includedTemplatePath : "/static/templates/AngularTemplates/searchResultByName.html"
+        includedTemplatePath : "/static/templates/AngularTemplates/searchResultByName.html",
+        queryUrl : "searchByName/"
     },
     species : {
         queryType : "species",
         labelDescription: "Sisesta otsinguks looma liik",
         inputGlyphicon : "fa fa-paw",
-        includedTemplatePath : "/static/templates/AngularTemplates/searchResultBySpecies.html"
+        includedTemplatePath : "/static/templates/AngularTemplates/searchResultBySpecies.html",
+        queryUrl : 'searchBySpecies/'
     },
     location : {
         queryType : "location",
         labelDescription: "Sisesta otsinguks looma asukoht",
         inputGlyphicon : "fa fa-location-arrow",
-        includedTemplatePath : "/static/templates/AngularTemplates/searchResultByLocation.html"
+        includedTemplatePath : "/static/templates/AngularTemplates/searchResultByLocation.html",
+        queryUrl : 'searchByLocation/'
     }
 });
 
@@ -27,6 +30,7 @@ app.run(function ($rootScope) {
     $rootScope.labelDescription = "";
     $rootScope.inputGlyphicon = "";
     $rootScope.includedTemplatePath = "";
+    $rootScope.queryUrl = "";
 
     $rootScope.currentAnimal = [];
     $rootScope.changingAnimalData = false;
@@ -48,18 +52,12 @@ app.config(function ($routeProvider, $locationProvider) {
 app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location) {
 
     $scope.searchResult = [];
-    $scope.makeQuery = function(event) {
+    $scope.makeQuery = function (event) {
         event.preventDefault();
         var form = $('#searchForm');
-        var queryUrl =  "";
-
-        if ($scope.getQueryType() == configurationParameters['name']['queryType']) { queryUrl = 'searchByName/'; }
-        else if ($scope.getQueryType() == configurationParameters['species']['queryType']) { queryUrl = 'searchBySpecies/'; }
-        else if ($scope.getQueryType() == configurationParameters['location']['queryType']) { queryUrl = 'searchByLocation/'; }
-
         $http({
             method: "POST",
-            url: queryUrl,
+            url: $scope.getQueryUrl(),
             data: $.param(form.serializeArray()),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
@@ -67,20 +65,21 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
                 if (response.data.length == 1 && $scope.getQueryType() == configurationParameters['name']['queryType']) {
                     $scope.setCurrentAnimal(response.data[0])
                 }
+                console.log(new Date(response.data[0].observationInfo[0].datetime));
                 $scope.searchResult = response.data;
                 form.trigger("reset");
             },
             function error(response) {
-                alert(response);
+                alert("Error");
             })
     }
 
-    $scope.removeAnimal = function() {
+    $scope.removeAnimal = function () {
 
         $http({
             method: "POST",
             url: "removeAnimal/",
-            data: $.param({ animalName : $scope.searchResult[0].name}),
+            data: $.param({animalName: $scope.searchResult[0].name}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
             function success(response) {
@@ -92,55 +91,84 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             })
     }
 
-    $scope.changeAnimalData = function() { $scope.setChangingAnimalData(true); }
+    $scope.changeAnimalData = function () {
+        $scope.setChangingAnimalData(true);
+    }
 
-    $scope.applyDataChanges = function($event) {
-                console.log(new Date(response.data[0].observationInfo[0].datetime))
+    $scope.applyDataChanges = function ($event) {
+        console.log(new Date(response.data[0].observationInfo[0].datetime))
     }
 
 
-
-
-
-
     /* Setters and getters */
-    $scope.setQueryType = function(queryType) { $rootScope.queryType = queryType;}
-    $scope.getQueryType = function() { return $rootScope.queryType; }
+    $scope.setQueryType = function (queryType) {
+        $rootScope.queryType = queryType;
+    }
+    $scope.getQueryType = function () {
+        return $rootScope.queryType;
+    }
 
-    $scope.setLabelDescription = function(labelDescription) { $rootScope.labelDescription = labelDescription; }
-    $scope.getLabelDescription = function() { return $rootScope.labelDescription; }
+    $scope.setLabelDescription = function (labelDescription) {
+        $rootScope.labelDescription = labelDescription;
+    }
+    $scope.getLabelDescription = function () {
+        return $rootScope.labelDescription;
+    }
 
-    $scope.setInputGlyphicon = function(inputGlyphicon) { $rootScope.inputGlyphicon = inputGlyphicon; }
-    $scope.getInputGlyphicon = function() { return $rootScope.inputGlyphicon; }
+    $scope.setInputGlyphicon = function (inputGlyphicon) {
+        $rootScope.inputGlyphicon = inputGlyphicon;
+    }
+    $scope.getInputGlyphicon = function () {
+        return $rootScope.inputGlyphicon;
+    }
 
-    $scope.setIncludedTemplatePath = function(includedTemplatePath) { $rootScope.includedTemplatePath = includedTemplatePath; }
-    $scope.getIncludedTemplatePath = function() { return $rootScope.includedTemplatePath; }
+    $scope.setIncludedTemplatePath = function (includedTemplatePath) {
+        $rootScope.includedTemplatePath = includedTemplatePath;
+    }
+    $scope.getIncludedTemplatePath = function () {
+        return $rootScope.includedTemplatePath;
+    }
 
-    $scope.setCurrentAnimal = function(currentAnimal) { $rootScope.currentAnimal = currentAnimal; }
-    $scope.getCurrentAnimal = function() { return $rootScope.currentAnimal; }
+    $scope.setCurrentAnimal = function (currentAnimal) {
+        $rootScope.currentAnimal = currentAnimal;
+    }
+    $scope.getCurrentAnimal = function () {
+        return $rootScope.currentAnimal;
+    }
 
-    $scope.setChangingAnimalData = function(changingAnimalData) { $rootScope.changingAnimalData = changingAnimalData; }
-    $scope.getChangingAnimalData = function() { return $rootScope.changingAnimalData; }
+    $scope.setChangingAnimalData = function (changingAnimalData) {
+        $rootScope.changingAnimalData = changingAnimalData;
+    }
+    $scope.getChangingAnimalData = function () {
+        return $rootScope.changingAnimalData;
+    }
 
+    $scope.setQueryUrl = function (queryUrl) {
+        $rootScope.queryUrl = queryUrl;
+    }
+    $scope.getQueryUrl = function () {
+        return $rootScope.queryUrl;
+    }
 
 
     /* Query configuring and reseting. */
-    $scope.makeQueryConfigurations = function(selectedOption) {
+    $scope.makeQueryConfigurations = function (selectedOption) {
         $scope.setQueryType(configurationParameters[selectedOption]['queryType']);
         $scope.setLabelDescription(configurationParameters[selectedOption]['labelDescription']);
         $scope.setInputGlyphicon(configurationParameters[selectedOption]['inputGlyphicon']);
         $scope.setIncludedTemplatePath(configurationParameters[selectedOption]['includedTemplatePath']);
+        $scope.setQueryUrl(configurationParameters[selectedOption]['queryUrl']);
     }
-    $scope.resetToDefault = function() {
+    $scope.resetToDefault = function () {
         $scope.setQueryType("");
         $scope.setLabelDescription("");
         $scope.setInputGlyphicon("");
         $scope.setIncludedTemplatePath("");
         $scope.setChangingAnimalData(false);
+        $scope.setQueryUrl("");
     }
 
-
-    $scope.directToAnimalDetails = function($event, view) {
+    $scope.directToAnimalDetails = function ($event, view) {
         $scope.setCurrentAnimal($scope.searchResult[$event.target.id]);
         $scope.makeQueryConfigurations('name');
         $location.path(view);
