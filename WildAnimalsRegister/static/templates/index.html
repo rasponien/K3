@@ -7,13 +7,14 @@
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="//rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'style/style.css' %}">
 </head>
 <body>
 
 <div ng-app="wildAnimals" ng-cloak>
 
-    <div ng-controller="wildAnimalsController" class="main">
+    <div ng-controller="wildAnimalsController as ctrl" class="main">
         <div class="main-header">
             <a ng-click="resetToDefault()" class="button back" href="#/">Tagasi esilehele</a>
             <div class="main-title">Metsloomade register</div>
@@ -24,6 +25,9 @@
                 <a ng-click="makeQueryConfigurations('species')" class="button btn-search" href="#/search">Otsi looma liigi järgi</a>
                 <a ng-click="makeQueryConfigurations('location')" class="button btn-search" href="#/search">Otsi looma asukoha järgi</a>
             </div>
+
+
+
             <div ng-view></div>
 
         </div>
@@ -34,21 +38,20 @@
 
 
 <!-- jQuery first, then Tether, then Bootstrap JS. -->
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
-        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
-        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
-        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular-route.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.6.3/angular-messages.js"></script>
 
-<script src="{% static 'angular/script.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" rel="stylesheet"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+<script src="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
+<link href="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css" rel="stylesheet">
+
+
+<script src="{% static 'scripts/script.js' %}"></script>
 
 </body>
 </html>

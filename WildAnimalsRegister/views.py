@@ -17,14 +17,9 @@ def index(request):
 def searchByName(request):
     animals = Animal.objects.get_queryset()
     searchKeyWord = request.POST['searchParameter']
-    animalObservations = AnimalObservation.objects.get_queryset()
-    for observation in animalObservations:
-        print("type of: " , observation.last_seen_time , " is " ,type(observation.last_seen_time) )
     result = []
-
     for animal in animals:
         if animal.name == searchKeyWord:
-            #print(type(findObservationInfo(animal.id)[0]['datetime']))
             result.append({
                 'name' : animal.name,
                 'species' : animal.species,
@@ -34,11 +29,9 @@ def searchByName(request):
 
 @csrf_exempt
 def searchBySpecies(request):
-    print("TERE")
     animals = Animal.objects.get_queryset()
     searchKeyWord = request.POST['searchParameter']
     result = []
-
     for animal in animals:
         if animal.species == searchKeyWord:
             result.append({
@@ -107,10 +100,21 @@ def removeAnimal(request):
             })
     return JsonResponse(result, safe=False)
 
+@csrf_exempt
+def changeAnimalData(request):
+    print(request.POST)
+    print(json.loads(str(request.POST)))
+
+
+
+
+
+
 def findObservationInfo(id):
     observationData = []
     for record in AnimalObservation.objects.filter(animal_id = id):
         observationData.append({
+            'id' : record.id,
             'location' : record.last_seen_location,
             'datetime' : record.last_seen_time
         })

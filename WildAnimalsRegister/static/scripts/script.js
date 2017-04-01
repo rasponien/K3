@@ -1,5 +1,47 @@
 /** Created by carlcustav on 3/21/2017. */
-var app = angular.module('wildAnimals', ['ngRoute']);
+var app = angular.module('wildAnimals', ['ngRoute', 'moment-picker']);
+
+
+/*
+app.directive('date', function (dateFilter) {
+    return {
+        require:'ngModel',
+        restrict: 'A',
+        scope: {
+            date: '=',
+            ngModel: '='
+        },
+        link:function (scope, elm, attrs, wildAnimalsController) {
+            wildAnimalsController.$formatters.unshift(function () {
+                return dateFilter(scope.ngModel, scope.date);
+            });
+        }
+    };
+});
+
+app.directive('labeldateformat', function (dateFilter) {
+    return {
+        restrict : 'A',
+        scope : {
+            labeldateformat: '=',
+            value: '=',
+        },
+        link:function (scope, element, attributes) {
+            element.append(dateFilter(scope.value, scope.labeldateformat));
+        }
+    }
+});
+
+*/
+
+/*
+app.directive('animalData', function() {
+  return {
+    restrict: 'E',
+    templateUrl: '/static/templates/Components/animalData.html'
+  };
+});
+*/
 app.constant('configurationParameters', {
     name : {
         queryType : "name",
@@ -37,7 +79,27 @@ app.run(function ($rootScope) {
 
 });
 
-app.config(function ($routeProvider, $locationProvider) {
+app.config(function ($routeProvider, $locationProvider, momentPickerProvider) {
+
+    /*
+    momentPickerProvider.options({
+        locale:        'et',
+        format:        'MMMM Do YYYY, h:mm',
+        minView:       'decade',
+        maxView:       'minute',
+        startView:     'year',
+        autoclose:     true,
+        today:         true,
+        keyboard:      false,
+
+        leftArrow:     '&larr;',
+        rightArrow:    '&rarr;',
+        hoursFormat:   'HH:[00]',
+        minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+        minutesStep:   5
+    });
+    */
+
     $locationProvider.hashPrefix('');
     $routeProvider
         .when("/search", {
@@ -51,6 +113,8 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location) {
 
+
+
     $scope.searchResult = [];
     $scope.makeQuery = function (event) {
         event.preventDefault();
@@ -62,10 +126,10 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(
             function success(response) {
+                $scope.createDateObject(response.data);
                 if (response.data.length == 1 && $scope.getQueryType() == configurationParameters['name']['queryType']) {
                     $scope.setCurrentAnimal(response.data[0])
                 }
-                console.log(new Date(response.data[0].observationInfo[0].datetime));
                 $scope.searchResult = response.data;
                 form.trigger("reset");
             },
@@ -95,8 +159,28 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         $scope.setChangingAnimalData(true);
     }
 
-    $scope.applyDataChanges = function ($event) {
-        console.log(new Date(response.data[0].observationInfo[0].datetime))
+    $scope.applyDataChanges = function (event) {
+        event.preventDefault();
+        console.log("---")
+
+        console.log($scope.getCurrentAnimal())
+        $http({
+            method: "POST",
+            url: "changeAnimalData/",
+            data: {
+                name : $scope.getCurrentAnimal().name,
+                species : $scope.getCurrentAnimal().species,
+                observationInfo : $scope.getCurrentAnimal().observationInfo
+            },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+            function success(response) {
+                $scope.resetToDefault();
+                $location.path('/');
+            },
+            function error(response) {
+                alert(response);
+        })
     }
 
 
@@ -172,6 +256,15 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         $scope.setCurrentAnimal($scope.searchResult[$event.target.id]);
         $scope.makeQueryConfigurations('name');
         $location.path(view);
+    }
+
+    $scope.createDateObject = function(result) {
+        for (var i = 0; i < result.length; i++) {
+            for (var j = 0; j < result[i].observationInfo.length; j++) {
+                result[i].observationInfo[j].datetime = moment(result[i].observationInfo[j].datetime).locale('et');
+            }
+        }
+
     }
 
 });

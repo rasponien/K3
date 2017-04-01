@@ -1,0 +1,13 @@
+<div class="dataHeader">Looma info</div>
+<div class="dataContent">
+    <div class="dataRow">
+        <label for="animalName" class="dataLabel"> Looma nimi: </label>
+        <input ng-show="getChangingAnimalData()==true" id="animalName" type="text" value="{{ getCurrentAnimal().name }}">
+        <div ng-show="getChangingAnimalData()==false" class="data">{{ getCurrentAnimal().name }}</div>
+    </div>
+    <div class="dataRow">
+        <label for="animalSpecies" class="dataLabel"> Looma liik: </label>
+        <input ng-show="getChangingAnimalData()==true" id="animalSpecies" type="text" value="{{ getCurrentAnimal().species }}">
+        <div ng-show="getChangingAnimalData()==false" class="data">{{ getCurrentAnimal().species }}</div>
+    </div>
+</div>

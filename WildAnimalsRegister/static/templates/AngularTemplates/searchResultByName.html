@@ -1,21 +1,21 @@
 <div class="noResult" ng-show="searchForm.$submitted && searchResult.length == 0">
     Sellise nimelist looma ei leitud!
 </div>
-<div ng-show="searchResult.length > 0"">
+<div ng-show="searchResult.length > 0">
     <div class="dataSeparator">
     <div class="animalHeader">{{ getCurrentAnimal().name }}</div>
-    <form ng-submit="applyDataChanges($event)">
+    <form ng-submit="applyDataChanges($event)" id="applyChangesForm">
         <div class="animalData">
             <div class="dataHeader">Looma info</div>
             <div class="dataContent">
                 <div class="dataRow">
                     <label for="animalName" class="dataLabel"> Looma nimi: </label>
-                    <input ng-show="getChangingAnimalData()==true" id="animalName" type="text" value="{{ getCurrentAnimal().name }}">
+                    <input ng-show="getChangingAnimalData()==true" id="animalName" type="text" ng-model="getCurrentAnimal().name" name="name">
                     <div ng-show="getChangingAnimalData()==false" class="data">{{ getCurrentAnimal().name }}</div>
                 </div>
                 <div class="dataRow">
                     <label for="animalSpecies" class="dataLabel"> Looma liik: </label>
-                    <input ng-show="getChangingAnimalData()==true" id="animalSpecies" type="text" value="{{ getCurrentAnimal().species }}">
+                    <input ng-show="getChangingAnimalData()==true" id="animalSpecies" type="text" ng-model="getCurrentAnimal().species" name="species">
                     <div ng-show="getChangingAnimalData()==false" class="data">{{ getCurrentAnimal().species }}</div>
                 </div>
             </div>
@@ -24,15 +24,20 @@
             <div class="dataHeader">Looma nägemise info</div>
             <div class="dataContent">
                 <div class="dataSection" ng-repeat="info in getCurrentAnimal().observationInfo">
-                    <div class="sectionHeader">Vaste nr.{{ $index+1 }}</div>
+                    <div class="sectionHeader">Vaste nr.{{$index+1}}</div>
                     <div class="dataRow">
                         <label for="last_seen_time" class="dataLabel"> Kuupäev: </label>
-                        <input ng-show="getChangingAnimalData()==true" placeholder="yyyy-MM-ddTHH:mm:ss" ng-model="info.datetime" min="2001-01-01T00:00:00" max="2013-12-31T00:00:00" id="last_seen_time" type="datetime-local">
-                        <div ng-show="getChangingAnimalData()==false" class="data">{{ info.datetime }}</div>
+                        <input ng-show="getChangingAnimalData()==true" class="form-control"
+                           ng-attr-placeholder="{{info.datetime}}"
+                           moment-picker="ctrl.stringDate"
+                           format="Do MMMM YYYY, h:mm"
+                           ng-model="info.datetime"
+                           ng-model-options="{ updateOn: 'blur' }">
+                        <div ng-show="getChangingAnimalData()==false" ng-bind="ctrl.stringDate"></div>
                     </div>
                     <div class="dataRow">
                         <label for="last_seen_location" class="dataLabel"> Asukoht: </label>
-                        <input ng-show="getChangingAnimalData()==true" id="last_seen_location" type="text" value="{{ info.location }}">
+                        <input ng-show="getChangingAnimalData()==true" id="last_seen_location" type="text" ng-model="info.location" name="location{{ $index }}">
                         <div ng-show="getChangingAnimalData()==false" class="data">{{ info.location }}</div>
                     </div>
                 </div>
