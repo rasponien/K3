@@ -1,12 +1,26 @@
-<div ng-hide="addObservationForm.$submitted" class="addObservationForm">
-    <form ng-submit="makeNewObservation($event)" method="POST" id="addObservationForm" name="addObservationForm">
-        <label>{{ getLabelDescription() }}</label>
-        <div class="input-group">
-            Looma nimi: <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName">
-            Looma nägemise koht: <input autocomplete="off" type="text" class="form-control" id="animalLocation" name="animalLocation">
-            Looma nägemise aeg: <input autocomplete="off" type="text" class="form-control" id="animalSeenTime" name="animalSeenTime">
+<div ng-hide="addObservationForm.$submitted" class="searchForm">
+    <form ng-submit="addAnimalObservation($event)" method="POST" id="addObservationForm" name="addObservationForm">
+        <div class="form-group-lg">
+            <div class="form-group">
+                <label for="animalName">Lisa looma nimi</label>
+                <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName">
+            </div>
+            <div class="form-group">
+                <label for="animalName">Lisa looma nägemise asukoht</label>
+                <input autocomplete="off" type="text" class="form-control" id="animalLocation" name="animalLocation">
+            </div>
+            <div class="form-group">
+                <label for="animalName">Lisa looma nägemise aeg</label>
+                <input autocomplete="off" class="form-control"
+                       id="animalSeenTime" name="animalSeenTime"
+                       moment-picker="stringDate"
+                       format="Do MMMM YYYY, h:mm"
+                       locale="et"
+                       ng-model="newObservationDate"
+                       ng-model-options="{ updateOn: 'blur' }">
+            </div>
+
         </div>
-        <br>
-         <button class="button addAnimal" type="submit">Lisa looma nägemine</button>
+        <button class="button addAnimal" type="submit">Lisa looma nägemine</button>
     </form>
 </div>

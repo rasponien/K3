@@ -1,15 +1,17 @@
 from __future__ import division
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.db.models import Max
 from .models import AnimalObservation, Animal
 from django.views.decorators.csrf import csrf_exempt
-import time
 import json
 
 def index(request):
     return render(request, 'index.html')
 
-def searchByName(request):
+def searchByName(request, searchParameter):
+    print("searchParameter  ", searchParameter)
+    print(request.get_raw_uri())
     animals = Animal.objects.get_queryset()
     searchKeyWord = request.GET['searchParameter']
 
@@ -31,6 +33,7 @@ def searchBySpecies(request):
     for animal in animals:
         if animal.species == searchKeyWord:
             result.append({
+                'id' : animal.id,
                 'name' : animal.name,
                 'species' : animal.species,
                 'observationInfo' : findObservationInfo(animal.id)
@@ -38,75 +41,46 @@ def searchBySpecies(request):
     return JsonResponse(result, safe=False)
 
 def searchByLocation(request):
-    animalObservations = AnimalObservation.objects.get_queryset()
-    animals = Animal.objects.get_queryset()
-    searchLocation = request.GET['searchParameter']
     result = []
-    animalsAdded = []
-    bestTime = 0
-    correctPosition = -10
-
-    for observation in animalObservations:
-        if observation.last_seen_location == searchLocation and (not(observation.animal_id in animalsAdded)):
-            for i in range (len(animalObservations)):
-                if(animalObservations[i].animal_id == observation.animal_id ):
-                    if(bestTime < time.mktime(animalObservations[i].last_seen_time.timetuple()) * 1000):
-                        bestTime = time.mktime(animalObservations[i].last_seen_time.timetuple()) * 1000
-                        correctPosition = i
-            # to get animal species
-            for animal in animals:
-                if (animal.name == observation.animal_id.name):
-                    species = animal.species
-                    break
-            result.append({
-                'name' : observation.animal_id.name,
-                'species' : species,
-                'observationInfo' : makeObservationInfo(animalObservations[correctPosition].last_seen_location, animalObservations[correctPosition].last_seen_time)
-            })
-            animalsAdded.append(observation.animal_id)
-            bestTime = 0
-            correctPosition = -10
+    animals = Animal.objects
+    searchLocation = request.GET['searchParameter']
+    animalObservations = AnimalObservation.objects.\
+        filter(last_seen_location=searchLocation).\
+        values('animal_id').\
+        annotate(latest_date=Max('last_seen_time'))
+    for animalObservation in animalObservations:
+        observedAnimal = animals.filter(id = animalObservation['animal_id'])[0]
+        result.append({
+            'id' : observedAnimal.id,
+            'name' : observedAnimal.name,
+            'species' : observedAnimal.species,
+            'observationInfo' : [{
+                'id' : AnimalObservation.objects.filter(last_seen_time=animalObservation['latest_date'])[0].id,
+                'location' : searchLocation,
+                'datetime' : animalObservation['latest_date']
+            }]
+        })
     return JsonResponse(result, safe=False)
 
 @csrf_exempt
 def addAnimal(request):
-    print("ADD ANIMAL :" , request.POST)
-    animalName = request.POST.get('animalName')
-    print("ANIMAL NAME :" , animalName )
-    animalSpecies = request.POST.get('animalSpecies')
-    print("ANIMAL SPECIES :", animalSpecies)
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
 
-    newObject = Animal(name=animalName,species=animalSpecies)
-    newObject.save()
-    result = []
-    return JsonResponse(result, safe=False)
+    Animal(name=body['animalName'],species=body['animalSpecies']).save()
+    return JsonResponse([], safe=False)
 
 @csrf_exempt
 def addObservation(request):
-    nameExists = False
-    print("ADD ANIMAL :" , request.POST)
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
 
-    new_animal_name = request.POST.get('animalName')
-    if(len(Animal.objects.filter(name=new_animal_name)) != 0):
-        animal = Animal.objects.filter(name=new_animal_name)
-        new_last_seen_location = request.POST.get('animalLocation')
-        new_last_seen_time = request.POST.get('animalSeenTime')
-        new_date = datetime.now()
-        print("new last seen time")
-        newObject = AnimalObservation(animal_id=animal[0], last_seen_location=new_last_seen_location,last_seen_time=new_date)
-        newObject.save()
-
-    result = []
-    return JsonResponse(result, safe=False)
-
-
-def makeObservationInfo(location, dateTime):
-    observationData = []
-    observationData.append({
-        'location': location,
-        'datetime': dateTime
-    })
-    return observationData
+    observedAnimal = Animal.objects.filter(name=body['animalName'])
+    if(len(observedAnimal) != 0):
+        AnimalObservation(animal_id=observedAnimal[0],
+                          last_seen_location=body['animalLocation'],
+                          last_seen_time=body['animalSeenTime']).save()
+    return JsonResponse([], safe=False)
 
 @csrf_exempt
 def removeAnimal(request):

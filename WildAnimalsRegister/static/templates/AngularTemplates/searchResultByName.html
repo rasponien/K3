@@ -36,7 +36,7 @@
                            ng-model="info.datetime"
                            ng-model-options="{ updateOn: 'blur' }">
 
-                        <div ng-show="getChangingAnimalData()==false" ng-bind="stringDate"></div>
+                        <div ng-show="getChangingAnimalData()==false">{{ info.datetime | amDateFormat:'Do MMMM YYYY, h:mm' }}</div>
                     </div>
                     <div class="dataRow">
                         <label for="last_seen_location" class="dataLabel"> Asukoht: </label>

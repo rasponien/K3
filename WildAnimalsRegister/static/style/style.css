@@ -111,6 +111,11 @@
 .changeAnimalDataBtn {
     background-color: #ffc343;
 }
+
+.addAnimal {
+    width: 400px;
+}
+
 .submitChanges {
     background-color: #3fbd3e;
     width: 702px;

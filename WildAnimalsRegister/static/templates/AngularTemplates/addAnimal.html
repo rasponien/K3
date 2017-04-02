@@ -1,11 +1,16 @@
-<div ng-hide="addAnimalForm.$submitted" class="addAnimalForm">
-    <form ng-submit="makeNewAnimal($event)" method="POST" id="addAnimalForm" name="addAnimalForm">
-        <label>{{ getLabelDescription() }}</label>
-        <div class="input-group">
-            Looma nimi: <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName">
-            Looma liik: <input autocomplete="off" type="text" class="form-control" id="animalSpecies" name="animalSpecies">
+<div ng-hide="addAnimalForm.$submitted" class="searchForm">
+    <form ng-submit="addAnimal($event)" method="POST" id="addAnimalForm" name="addAnimalForm">
+        <div class="form-group-lg">
+            <div class="form-group">
+                <label for="animalName">Lisa looma nimi</label>
+                <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName">
+            </div>
+            <div class="form-group">
+                <label for="animalSpecies">Lisa looma liik</label>
+                <select class="form-control" id="animalSpecies" name="animalSpecies" ng-model="selectedSpecies" ng-options="species for species in animalSpecies track by species">
+                </select>
+            </div>
         </div>
-        <br>
-         <button class="button addAnimal" type="submit">Lisa loom</button>
+        <button class="button addAnimal" type="submit">Lisa loom</button>
     </form>
 </div>

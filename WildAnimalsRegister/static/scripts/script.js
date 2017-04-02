@@ -1,7 +1,6 @@
 /** Created by carlcustav on 3/21/2017. */
 var app = angular.module('wildAnimals', ['ngRoute', 'moment-picker', 'angularMoment']);
 
-
 /*
 app.directive('date', function (dateFilter) {
     return {
@@ -33,7 +32,6 @@ app.directive('labeldateformat', function (dateFilter) {
 });
 
 */
-
 /*
 app.directive('animalData', function() {
   return {
@@ -42,32 +40,45 @@ app.directive('animalData', function() {
   };
 });
 */
+
+app.constant('animalSpecies',
+    [
+        'karu',
+        'ilves',
+        'hunt',
+        'rebane',
+        'hirv',
+        'kits',
+        'ahv'
+    ]
+)
 app.constant('configurationParameters', {
     name : {
         queryType : "name",
         labelDescription : "Sisesta otsinguks looma nimi",
         inputGlyphicon : "fa fa-paw",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByName.html",
-        queryUrl : "searchByName?"
+        queryUrl : "searchByName/?"
     },
     species : {
         queryType : "species",
         labelDescription: "Sisesta otsinguks looma liik",
         inputGlyphicon : "fa fa-paw",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultBySpecies.html",
-        queryUrl : 'searchBySpecies?'
+        queryUrl : 'searchBySpecies/?'
     },
     location : {
         queryType : "location",
         labelDescription: "Sisesta otsinguks looma asukoht",
         inputGlyphicon : "fa fa-location-arrow",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByLocation.html",
-        queryUrl : 'searchByLocation?'
+        queryUrl : 'searchByLocation/?'
     },
       addAnimal : {
         queryType : "addAnimal",
         labelDescription: "Lisa looma nimi ja liik",
         inputGlyphicon : "fa fa-location-arrow",
+        includedTemplatePath : "",
         queryUrl : 'addAnimal/'
     },
       addObservation : {
@@ -111,72 +122,65 @@ app.config(function ($routeProvider, $locationProvider) {
         });
 });
 
-app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location) {
+app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, animalSpecies, $location) {
+
+    $scope.animalSpecies = animalSpecies;
+    $scope.selectedSpecies = $scope.animalSpecies[0]
 
     $scope.searchResult = [];
-
     $scope.makeQuery = function (event) {
         event.preventDefault();
         var form = $('#searchForm');
-        console.log($.param(form.serializeArray()))
-
-
+        console.log($scope.getQueryUrl() + $.param(form.serializeArray()))
         $http({
             method: "GET",
-            url: $scope.getQueryUrl() + $.param(form.serializeArray()),
-            contentType: "application/json",
-            data: form.serializeArray(),
+            url: $scope.getQueryUrl() + $.param(form.serializeArray())
         }).then(
             function success(response) {
                 $scope.createDateObject(response.data);
-                if (response.data.length == 1 && $scope.getQueryType() == configurationParameters['name']['queryType']) {
+                if ($scope.getQueryType() == configurationParameters['name']['queryType']) {
                     $scope.setCurrentAnimal(response.data[0])
                 }
                 $scope.searchResult = response.data;
+                console.log($scope.searchResult)
                 form.trigger("reset");
             },
-            function error(response) {
-                alert("SearchFrom Error");
-            })
+            function error(response) { alert("SearchFrom Error"); })
     }
 
-
-    $scope.makeNewAnimal = function (event) {
+    $scope.addAnimal = function (event) {
         event.preventDefault();
         var form = $('#addAnimalForm');
         $http({
             method: "POST",
             url: $scope.getQueryUrl(),
-            data: $.param(form.serializeArray()),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).then(
-            function success(response) {
-                console.log('SAIN RESPONSE : ' + response);
-                $scope.resetToDefault();
-                $location.path('/');
+            contentType: "application/json",
+            data: {
+                animalName : form.find('input[name="animalName"]').val(),
+                animalSpecies : $scope.selectedSpecies
             },
-            function error(response) {
-                alert("Error");
-            })
+        }).then(
+            function success(response) { $scope.resetToDefault(); },
+            function error(response) { alert("AddAnimal Error"); }
+        )
     }
 
-    $scope.makeNewObservation = function (event) {
+    $scope.addAnimalObservation = function (event) {
         event.preventDefault();
         var form = $('#addObservationForm');
         $http({
             method: "POST",
             url: $scope.getQueryUrl(),
-            data: $.param(form.serializeArray()),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            contentType: "application/json",
+            data: {
+                animalName : form.find('input[name="animalName"]').val(),
+                animalLocation : form.find('input[name="animalLocation"]').val(),
+                animalSeenTime : $scope.newObservationDate
+            }
         }).then(
-            function success(response) {
-                console.log('SAIN RESPONSE : ' + response);
-                $scope.resetToDefault();
-                $location.path('/');
-            },
-            function error(response) {
-                alert("fucking response on perses Error");
-            })
+            function success(response) { $scope.resetToDefault(); },
+            function error(response) { alert("AddAnimalObservation Error"); }
+        )
     }
 
   $scope.removeAnimal = function () {
@@ -187,21 +191,13 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             contentType: "application/json",
             data: $scope.getCurrentAnimal().name,
         }).then(
-            function success(response) {
-                $scope.resetToDefault();
-                $location.path('/');
-            },
-            function error(response) {
-                alert("Removal" + response);
-            })
+            function success(response) { $scope.resetToDefault(); },
+            function error(response) { alert("removeAnimal Error"); }
+        )
     }
 
 
-
-    $scope.changeAnimalData = function () {
-        $scope.setChangingAnimalData(true);
-    }
-
+    $scope.changeAnimalData = function () { $scope.setChangingAnimalData(true); }
     $scope.applyDataChanges = function (event) {
         event.preventDefault();
         $http({
@@ -210,14 +206,11 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
             contentType: "application/json",
             data: $scope.getCurrentAnimal()
         }).then(
-            function success(response) {
-                $scope.resetToDefault();
-                $location.path('/');
-            },
-            function error(response) {
-                alert(response);
-        })
+            function success(response) { $scope.resetToDefault(); },
+            function error(response) { alert("ApplyDataChanges Error"); }
+        )
     }
+
 
 
     /* Setters and getters */
@@ -242,9 +235,9 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
     $scope.setQueryUrl = function (queryUrl) {$rootScope.queryUrl = queryUrl;}
     $scope.getQueryUrl = function () {return $rootScope.queryUrl;}
 
+
     /* Query configuring and reseting. */
     $scope.makeQueryConfigurations = function (selectedOption) {
-        console.log("Configuration parameter:" + configurationParameters[selectedOption]);
         $scope.setQueryType(configurationParameters[selectedOption]['queryType']);
         $scope.setLabelDescription(configurationParameters[selectedOption]['labelDescription']);
         $scope.setInputGlyphicon(configurationParameters[selectedOption]['inputGlyphicon']);
@@ -258,12 +251,13 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         $scope.setIncludedTemplatePath("");
         $scope.setChangingAnimalData(false);
         $scope.setQueryUrl("");
+        $location.path('/');
     }
 
-    $scope.directToAnimalDetails = function ($event, view) {
+    $scope.directToAnimalDetails = function ($event) {
         $scope.setCurrentAnimal($scope.searchResult[$event.target.id]);
         $scope.makeQueryConfigurations('name');
-        $location.path(view);
+        $location.path('/search');
     }
 
     $scope.createDateObject = function(result) {

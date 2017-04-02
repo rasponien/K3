@@ -3,7 +3,7 @@
 </div>
 <div ng-show="searchResult.length != 0" ng-repeat="a in searchResult">
     <div class="dataSeparator">
-        <div id="{{ $index }}" ng-click="directToAnimalDetails($event, '/search')" class="animalHeader">{{ a.name }}</div>
+        <div id="{{ $index }}" ng-click="directToAnimalDetails($event)" class="animalHeader">{{ a.name }}</div>
         <div class="animalData">
         <div class="dataHeader">Looma info</div>
         <div class="dataContent">
