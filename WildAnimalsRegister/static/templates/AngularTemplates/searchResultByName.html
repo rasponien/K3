@@ -27,13 +27,16 @@
                     <div class="sectionHeader">Vaste nr.{{$index+1}}</div>
                     <div class="dataRow">
                         <label for="last_seen_time" class="dataLabel"> Kuupäev: </label>
+
                         <input ng-show="getChangingAnimalData()==true" class="form-control"
                            ng-attr-placeholder="{{info.datetime}}"
-                           moment-picker="ctrl.stringDate"
+                           moment-picker="stringDate"
                            format="Do MMMM YYYY, h:mm"
+                           locale="et"
                            ng-model="info.datetime"
                            ng-model-options="{ updateOn: 'blur' }">
-                        <div ng-show="getChangingAnimalData()==false" ng-bind="ctrl.stringDate"></div>
+
+                        <div ng-show="getChangingAnimalData()==false" ng-bind="stringDate"></div>
                     </div>
                     <div class="dataRow">
                         <label for="last_seen_location" class="dataLabel"> Asukoht: </label>

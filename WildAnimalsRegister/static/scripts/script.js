@@ -92,26 +92,7 @@ app.run(function ($rootScope) {
 
 });
 
-app.config(function ($routeProvider, $locationProvider, momentPickerProvider) {
-
-    /*
-    momentPickerProvider.options({
-        locale:        'et',
-        format:        'MMMM Do YYYY, h:mm',
-        minView:       'decade',
-        maxView:       'minute',
-        startView:     'year',
-        autoclose:     true,
-        today:         true,
-        keyboard:      false,
-
-        leftArrow:     '&larr;',
-        rightArrow:    '&rarr;',
-        hoursFormat:   'HH:[00]',
-        minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
-        minutesStep:   5
-    });
-    */
+app.config(function ($routeProvider, $locationProvider) {
 
     $locationProvider.hashPrefix('');
     $routeProvider
@@ -133,6 +114,7 @@ app.config(function ($routeProvider, $locationProvider, momentPickerProvider) {
 app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location) {
 
     $scope.searchResult = [];
+
     $scope.makeQuery = function (event) {
         event.preventDefault();
         var form = $('#searchForm');
@@ -197,10 +179,10 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
   $scope.removeAnimal = function () {
 
         $http({
-            method: "POST",
+            method: "DELETE",
             url: "removeAnimal/",
-            data: $.param({animalName: $scope.searchResult[0].name}),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            contentType: "application/json",
+            data: $scope.getCurrentAnimal().name,
         }).then(
             function success(response) {
                 $scope.resetToDefault();
@@ -219,18 +201,11 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
 
     $scope.applyDataChanges = function (event) {
         event.preventDefault();
-        console.log("---")
-
-        console.log($scope.getCurrentAnimal())
         $http({
             method: "POST",
             url: "changeAnimalData/",
-            data: {
-                name : $scope.getCurrentAnimal().name,
-                species : $scope.getCurrentAnimal().species,
-                observationInfo : $scope.getCurrentAnimal().observationInfo
-            },
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            contentType: "application/json",
+            data: $scope.getCurrentAnimal()
         }).then(
             function success(response) {
                 $scope.resetToDefault();
@@ -243,55 +218,26 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
 
 
     /* Setters and getters */
-    $scope.setQueryType = function (queryType) {
-        $rootScope.queryType = queryType;
-    }
-    $scope.getQueryType = function () {
-        return $rootScope.queryType;
-    }
+    $scope.setQueryType = function (queryType) {$rootScope.queryType = queryType;}
+    $scope.getQueryType = function () {return $rootScope.queryType;}
 
-    $scope.setLabelDescription = function (labelDescription) {
-        $rootScope.labelDescription = labelDescription;
-    }
-    $scope.getLabelDescription = function () {
-        return $rootScope.labelDescription;
-    }
+    $scope.setLabelDescription = function (labelDescription) {$rootScope.labelDescription = labelDescription;}
+    $scope.getLabelDescription = function () {return $rootScope.labelDescription;}
 
-    $scope.setInputGlyphicon = function (inputGlyphicon) {
-        $rootScope.inputGlyphicon = inputGlyphicon;
-    }
-    $scope.getInputGlyphicon = function () {
-        return $rootScope.inputGlyphicon;
-    }
+    $scope.setInputGlyphicon = function (inputGlyphicon) {$rootScope.inputGlyphicon = inputGlyphicon;}
+    $scope.getInputGlyphicon = function () {return $rootScope.inputGlyphicon;}
 
-    $scope.setIncludedTemplatePath = function (includedTemplatePath) {
-        $rootScope.includedTemplatePath = includedTemplatePath;
-    }
-    $scope.getIncludedTemplatePath = function () {
-        return $rootScope.includedTemplatePath;
-    }
+    $scope.setIncludedTemplatePath = function (includedTemplatePath) {$rootScope.includedTemplatePath = includedTemplatePath;}
+    $scope.getIncludedTemplatePath = function () {return $rootScope.includedTemplatePath;}
 
-    $scope.setCurrentAnimal = function (currentAnimal) {
-        $rootScope.currentAnimal = currentAnimal;
-    }
-    $scope.getCurrentAnimal = function () {
-        return $rootScope.currentAnimal;
-    }
+    $scope.setCurrentAnimal = function (currentAnimal) {$rootScope.currentAnimal = currentAnimal;}
+    $scope.getCurrentAnimal = function () {return $rootScope.currentAnimal;}
 
-    $scope.setChangingAnimalData = function (changingAnimalData) {
-        $rootScope.changingAnimalData = changingAnimalData;
-    }
-    $scope.getChangingAnimalData = function () {
-        return $rootScope.changingAnimalData;
-    }
+    $scope.setChangingAnimalData = function (changingAnimalData) {$rootScope.changingAnimalData = changingAnimalData;}
+    $scope.getChangingAnimalData = function () {return $rootScope.changingAnimalData;}
 
-    $scope.setQueryUrl = function (queryUrl) {
-        $rootScope.queryUrl = queryUrl;
-    }
-    $scope.getQueryUrl = function () {
-        return $rootScope.queryUrl;
-    }
-
+    $scope.setQueryUrl = function (queryUrl) {$rootScope.queryUrl = queryUrl;}
+    $scope.getQueryUrl = function () {return $rootScope.queryUrl;}
 
     /* Query configuring and reseting. */
     $scope.makeQueryConfigurations = function (selectedOption) {
