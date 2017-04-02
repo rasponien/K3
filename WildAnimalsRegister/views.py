@@ -3,20 +3,16 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import AnimalObservation, Animal
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
 import time
-from django.core.serializers.json import DjangoJSONEncoder
 import json
-from datetime import datetime
-from django.http import HttpResponse
 
 def index(request):
     return render(request, 'index.html')
 
-@csrf_exempt
 def searchByName(request):
     animals = Animal.objects.get_queryset()
-    searchKeyWord = request.POST['searchParameter']
+    searchKeyWord = request.GET['searchParameter']
+
     result = []
     for animal in animals:
         if animal.name == searchKeyWord:
@@ -28,10 +24,9 @@ def searchByName(request):
             })
     return JsonResponse(result, safe=False)
 
-@csrf_exempt
 def searchBySpecies(request):
     animals = Animal.objects.get_queryset()
-    searchKeyWord = request.POST['searchParameter']
+    searchKeyWord = request.GET['searchParameter']
     result = []
     for animal in animals:
         if animal.species == searchKeyWord:
@@ -42,11 +37,10 @@ def searchBySpecies(request):
             })
     return JsonResponse(result, safe=False)
 
-@csrf_exempt
 def searchByLocation(request):
     animalObservations = AnimalObservation.objects.get_queryset()
     animals = Animal.objects.get_queryset()
-    searchLocation = request.POST['searchParameter']
+    searchLocation = request.GET['searchParameter']
     result = []
     animalsAdded = []
     bestTime = 0

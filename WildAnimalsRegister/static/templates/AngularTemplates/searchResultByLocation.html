@@ -24,7 +24,7 @@
                 <div class="sectionHeader">Vaste nr.{{ $index+1 }}</div>
                 <div class="dataRow">
                     <label class="dataLabel"> Kuupäev: </label>
-                    <div class="data">{{ info.datetime }}</div>
+                    <div class="data">{{ info.datetime | amDateFormat:'Do MMMM YYYY, h:mm' }}</div>
                 </div>
                 <div class="dataRow">
                     <label class="dataLabel"> Asukoht: </label>

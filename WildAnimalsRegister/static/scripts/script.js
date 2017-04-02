@@ -1,5 +1,5 @@
 /** Created by carlcustav on 3/21/2017. */
-var app = angular.module('wildAnimals', ['ngRoute', 'moment-picker']);
+var app = angular.module('wildAnimals', ['ngRoute', 'moment-picker', 'angularMoment']);
 
 
 /*
@@ -48,21 +48,21 @@ app.constant('configurationParameters', {
         labelDescription : "Sisesta otsinguks looma nimi",
         inputGlyphicon : "fa fa-paw",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByName.html",
-        queryUrl : "searchByName/"
+        queryUrl : "searchByName?"
     },
     species : {
         queryType : "species",
         labelDescription: "Sisesta otsinguks looma liik",
         inputGlyphicon : "fa fa-paw",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultBySpecies.html",
-        queryUrl : 'searchBySpecies/'
+        queryUrl : 'searchBySpecies?'
     },
     location : {
         queryType : "location",
         labelDescription: "Sisesta otsinguks looma asukoht",
         inputGlyphicon : "fa fa-location-arrow",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByLocation.html",
-        queryUrl : 'searchByLocation/'
+        queryUrl : 'searchByLocation?'
     }
 });
 
@@ -99,11 +99,14 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
     $scope.makeQuery = function (event) {
         event.preventDefault();
         var form = $('#searchForm');
+        console.log($.param(form.serializeArray()))
+
+
         $http({
-            method: "POST",
-            url: $scope.getQueryUrl(),
-            data: $.param(form.serializeArray()),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            method: "GET",
+            url: $scope.getQueryUrl() + $.param(form.serializeArray()),
+            contentType: "application/json",
+            data: form.serializeArray(),
         }).then(
             function success(response) {
                 $scope.createDateObject(response.data);
@@ -210,6 +213,5 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         }
 
     }
-
 });
 
