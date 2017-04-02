@@ -73,6 +73,37 @@ def searchByLocation(request):
             correctPosition = -10
     return JsonResponse(result, safe=False)
 
+@csrf_exempt
+def addAnimal(request):
+    print("ADD ANIMAL :" , request.POST)
+    animalName = request.POST.get('animalName')
+    print("ANIMAL NAME :" , animalName )
+    animalSpecies = request.POST.get('animalSpecies')
+    print("ANIMAL SPECIES :", animalSpecies)
+
+    newObject = Animal(name=animalName,species=animalSpecies)
+    newObject.save()
+    result = []
+    return JsonResponse(result, safe=False)
+
+@csrf_exempt
+def addObservation(request):
+    nameExists = False
+    print("ADD ANIMAL :" , request.POST)
+    new_animal_id = request.POST.get('animalName')
+    if(len(Animal.objects.filter(name=new_animal_id)) != 0):
+        animal = Animal.objects.filter(name=new_animal_id)
+        if(animal.name == new_animal_id):
+            new_last_seen_location = request.POST.get('animalLocation')
+            new_last_seen_time = request.POST.get('animalSeenTime')
+            new_date = datetime.now()
+            newObject = AnimalObservation(animal_id=animal, last_seen_location=new_last_seen_location,last_seen_time=new_date)
+            newObject.save()
+
+    result = []
+    return JsonResponse(result, safe=False)
+
+
 def makeObservationInfo(location, dateTime):
     observationData = []
     observationData.append({
@@ -104,11 +135,6 @@ def removeAnimal(request):
 def changeAnimalData(request):
     print(request.POST)
     print(json.loads(str(request.POST)))
-
-
-
-
-
 
 def findObservationInfo(id):
     observationData = []

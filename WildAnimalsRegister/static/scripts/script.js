@@ -63,6 +63,19 @@ app.constant('configurationParameters', {
         inputGlyphicon : "fa fa-location-arrow",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByLocation.html",
         queryUrl : 'searchByLocation/'
+    },
+      addAnimal : {
+        queryType : "addAnimal",
+        labelDescription: "Lisa looma nimi ja liik",
+        inputGlyphicon : "fa fa-location-arrow",
+        queryUrl : 'addAnimal/'
+    },
+      addObservation : {
+        queryType : "addObservation",
+        labelDescription: "Lisa looma nimi, viimati nägemise asukoht ja aeg",
+        inputGlyphicon : "fa fa-location-arrow",
+        includedTemplatePath : "",
+        queryUrl : 'addObservation/'
     }
 });
 
@@ -105,6 +118,12 @@ app.config(function ($routeProvider, $locationProvider, momentPickerProvider) {
         .when("/search", {
             templateUrl: "/static/templates/AngularTemplates/search.html",
             controller: 'wildAnimalsController'
+        }).when("/addAnimal", {
+            templateUrl: "/static/templates/AngularTemplates/addAnimal.html",
+            controller: 'wildAnimalsController'
+        }).when("/addObservation", {
+            templateUrl: "/static/templates/AngularTemplates/addObservation.html",
+            controller: 'wildAnimalsController'
         })
         .otherwise({
             redirectTo: '/'
@@ -112,8 +131,6 @@ app.config(function ($routeProvider, $locationProvider, momentPickerProvider) {
 });
 
 app.controller('wildAnimalsController', function ($scope, $http, $rootScope, configurationParameters, $location) {
-
-
 
     $scope.searchResult = [];
     $scope.makeQuery = function (event) {
@@ -134,11 +151,50 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
                 form.trigger("reset");
             },
             function error(response) {
+                alert("SearchFrom Error");
+            })
+    }
+
+
+    $scope.makeNewAnimal = function (event) {
+        event.preventDefault();
+        var form = $('#addAnimalForm');
+        $http({
+            method: "POST",
+            url: $scope.getQueryUrl(),
+            data: $.param(form.serializeArray()),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+            function success(response) {
+                console.log('SAIN RESPONSE : ' + response);
+                $scope.resetToDefault();
+                $location.path('/');
+            },
+            function error(response) {
                 alert("Error");
             })
     }
 
-    $scope.removeAnimal = function () {
+    $scope.makeNewObservation = function (event) {
+        event.preventDefault();
+        var form = $('#addObservationForm');
+        $http({
+            method: "POST",
+            url: $scope.getQueryUrl(),
+            data: $.param(form.serializeArray()),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(
+            function success(response) {
+                console.log('SAIN RESPONSE : ' + response);
+                $scope.resetToDefault();
+                $location.path('/');
+            },
+            function error(response) {
+                alert("fucking response on perses Error");
+            })
+    }
+
+  $scope.removeAnimal = function () {
 
         $http({
             method: "POST",
@@ -151,9 +207,11 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
                 $location.path('/');
             },
             function error(response) {
-                alert(response);
+                alert("Removal" + response);
             })
     }
+
+
 
     $scope.changeAnimalData = function () {
         $scope.setChangingAnimalData(true);
@@ -237,6 +295,7 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
 
     /* Query configuring and reseting. */
     $scope.makeQueryConfigurations = function (selectedOption) {
+        console.log("Configuration parameter:" + configurationParameters[selectedOption]);
         $scope.setQueryType(configurationParameters[selectedOption]['queryType']);
         $scope.setLabelDescription(configurationParameters[selectedOption]['labelDescription']);
         $scope.setInputGlyphicon(configurationParameters[selectedOption]['inputGlyphicon']);

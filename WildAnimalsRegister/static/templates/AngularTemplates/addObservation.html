@@ -1,0 +1,12 @@
+<div ng-hide="addObservationForm.$submitted" class="addObservationForm">
+    <form ng-submit="makeNewObservation($event)" method="POST" id="addObservationForm" name="addObservationForm">
+        <label>{{ getLabelDescription() }}</label>
+        <div class="input-group">
+            Looma nimi: <input autocomplete="off" type="text" class="form-control" id="animalName" name="animalName">
+            Looma nägemise koht: <input autocomplete="off" type="text" class="form-control" id="animalLocation" name="animalLocation">
+            Looma nägemise aeg: <input autocomplete="off" type="text" class="form-control" id="animalSeenTime" name="animalSeenTime">
+        </div>
+        <br>
+         <button class="button addAnimal" type="submit">Lisa looma nägemine</button>
+    </form>
+</div>
