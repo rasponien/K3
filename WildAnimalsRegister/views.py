@@ -91,15 +91,25 @@ def addAnimal(request):
 def addObservation(request):
     nameExists = False
     print("ADD ANIMAL :" , request.POST)
+
     new_animal_id = request.POST.get('animalName')
     if(len(Animal.objects.filter(name=new_animal_id)) != 0):
-        animal = Animal.objects.filter(name=new_animal_id)
-        if(animal.name == new_animal_id):
-            new_last_seen_location = request.POST.get('animalLocation')
-            new_last_seen_time = request.POST.get('animalSeenTime')
-            new_date = datetime.now()
-            newObject = AnimalObservation(animal_id=animal, last_seen_location=new_last_seen_location,last_seen_time=new_date)
-            newObject.save()
+        print("if sees")
+        animal = Animal.objects.filter(name=request.POST.get('animalName'))
+        print("Animal type: " , type(animal))
+        # for i in animal:
+        #     print("For in animal : ",i)
+        print("animal id  :" , animal[0].id)
+        print("animal id type:" , type(animal[0]))
+        # animal = Animal.objects.filter(name=new_animal_id)
+        print("Animal objekt")
+        new_last_seen_location = request.POST.get('animalLocation')
+        print("New last seen location")
+        new_last_seen_time = request.POST.get('animalSeenTime')
+        new_date = datetime.now()
+        print("new last seen time")
+        newObject = AnimalObservation(animal_id=animal[0], last_seen_location=new_last_seen_location,last_seen_time=new_date)
+        newObject.save()
 
     result = []
     return JsonResponse(result, safe=False)
