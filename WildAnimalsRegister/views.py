@@ -21,6 +21,7 @@ def searchByName(request):
     for animal in animals:
         if animal.name == searchKeyWord:
             result.append({
+                'id' : animal.id,
                 'name' : animal.name,
                 'species' : animal.species,
                 'observationInfo' : findObservationInfo(animal.id)
@@ -81,29 +82,26 @@ def makeObservationInfo(location, dateTime):
     })
     return observationData
 
+@csrf_exempt
 def removeAnimal(request):
-
-    animals = Animal.objects.get_queryset()
-    searchKeyWord = request.POST['animalName']
-
-    animalToDelete = Animal.objects.filter(name = searchKeyWord)
-    animalToDelete.delete();
-
-    result = []
-
-    for animal in animals:
-        if animal.species == searchKeyWord:
-            result.append({
-                'name' : animal.name,
-                'species' : animal.species,
-                'observationInfo' : findObservationInfo(animal.id)
-            })
-    return JsonResponse(result, safe=False)
+    animalName = request.body.decode('utf-8')
+    Animal.objects.filter(name = animalName).delete()
+    return JsonResponse([], safe=False)
 
 @csrf_exempt
 def changeAnimalData(request):
-    print(request.POST)
-    print(json.loads(str(request.POST)))
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+
+    animal = Animal.objects.filter(id = body['id'])
+    observationRecords = AnimalObservation.objects
+
+
+    animal.update(name=body['name'], species=body['species'])
+    for observationRecord in body['observationInfo']:
+        observationRecords.filter(id = observationRecord['id']).update(last_seen_location=observationRecord['location'], last_seen_time=observationRecord['datetime'])
+    return JsonResponse([], safe=False)
+
 
 
 
