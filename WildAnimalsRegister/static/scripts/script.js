@@ -58,35 +58,35 @@ app.constant('configurationParameters', {
         labelDescription : "Sisesta otsinguks looma nimi",
         inputGlyphicon : "fa fa-paw",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByName.html",
-        queryUrl : "searchByName/?"
+        queryUrl : "animals/"
     },
     species : {
         queryType : "species",
         labelDescription: "Sisesta otsinguks looma liik",
         inputGlyphicon : "fa fa-paw",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultBySpecies.html",
-        queryUrl : 'searchBySpecies/?'
+        queryUrl : 'animals/species/'
     },
     location : {
         queryType : "location",
         labelDescription: "Sisesta otsinguks looma asukoht",
         inputGlyphicon : "fa fa-location-arrow",
         includedTemplatePath : "/static/templates/AngularTemplates/searchResultByLocation.html",
-        queryUrl : 'searchByLocation/?'
+        queryUrl : 'animals/locations/'
     },
-      addAnimal : {
+    addAnimal : {
         queryType : "addAnimal",
         labelDescription: "Lisa looma nimi ja liik",
         inputGlyphicon : "fa fa-location-arrow",
         includedTemplatePath : "",
-        queryUrl : 'addAnimal/'
+        queryUrl : 'animals/'
     },
       addObservation : {
         queryType : "addObservation",
         labelDescription: "Lisa looma nimi, viimati nägemise asukoht ja aeg",
         inputGlyphicon : "fa fa-location-arrow",
         includedTemplatePath : "",
-        queryUrl : 'addObservation/'
+        queryUrl : 'observations/'
     }
 });
 
@@ -132,9 +132,10 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
         event.preventDefault();
         var form = $('#searchForm');
         console.log($scope.getQueryUrl() + $.param(form.serializeArray()))
+        console.log(form.serializeArray()[0].value)
         $http({
             method: "GET",
-            url: $scope.getQueryUrl() + $.param(form.serializeArray())
+            url: $scope.getQueryUrl() + form.serializeArray()[0].value + ($scope.getQueryUrl() != 'animals/' ? '/search/' : "/")
         }).then(
             function success(response) {
                 $scope.createDateObject(response.data);
@@ -187,9 +188,7 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
 
         $http({
             method: "DELETE",
-            url: "removeAnimal/",
-            contentType: "application/json",
-            data: $scope.getCurrentAnimal().name,
+            url: "animals/" + $scope.getCurrentAnimal().name,
         }).then(
             function success(response) { $scope.resetToDefault(); },
             function error(response) { alert("removeAnimal Error"); }
@@ -201,8 +200,8 @@ app.controller('wildAnimalsController', function ($scope, $http, $rootScope, con
     $scope.applyDataChanges = function (event) {
         event.preventDefault();
         $http({
-            method: "POST",
-            url: "changeAnimalData/",
+            method: "PUT",
+            url: "animals/" + $scope.getCurrentAnimal().name + '/',
             contentType: "application/json",
             data: $scope.getCurrentAnimal()
         }).then(

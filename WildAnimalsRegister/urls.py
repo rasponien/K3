@@ -1,14 +1,14 @@
 __author__ = 'carlcustav'
 from django.conf.urls import url
 from . import views
+from WildAnimalsRegister.views import SpeciesView, AnimalView, LocationsView, AnimalAddView, AnimalObservationAddView
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^searchByName/(?P<searchParameter>.*)$', views.searchByName, name='searchByName'),
-    url(r'^searchBySpecies', views.searchBySpecies, name='searchBySpecies'),
-    url(r'^searchByLocation', views.searchByLocation, name='searchByLocation'),
-    url(r'^removeAnimal/', views.removeAnimal, name='removeAnimal'),
-    url(r'^changeAnimalData/', views.changeAnimalData, name='changeAnimalData'),
-    url(r'^addAnimal/', views.addAnimal, name='addAnimal'),
-    url(r'^addObservation/', views.addObservation, name='addObservation')
+    url(r'^animals/species/(?P<species>.*)/search/$', SpeciesView.as_view(), name='searchBySpecies'),
+    url(r'^animals/locations/(?P<location>.*)/search/$', LocationsView.as_view(), name='searchByLocation'),
+    url(r'^animals/(?P<name>.*)/$', AnimalView.as_view(), name='searchByName'),
+    url(r'^animals/$', AnimalAddView.as_view(), name='addAnimal'),
+    url(r'^observations/$', AnimalObservationAddView.as_view(), name='addObservation')
 ]
 

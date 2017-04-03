@@ -1,7 +1,7 @@
 from __future__ import division
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.db.models import Max
+from django.views.generic.base import View
 from .models import AnimalObservation, Animal
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -9,101 +9,83 @@ import json
 def index(request):
     return render(request, 'index.html')
 
-def searchByName(request, searchParameter):
-    print("searchParameter  ", searchParameter)
-    print(request.get_raw_uri())
-    animals = Animal.objects.get_queryset()
-    searchKeyWord = request.GET['searchParameter']
+class SpeciesView(View):
+    def get(self, request, species):
+        return JsonResponse(getAnimalJSON("species", species), safe=False)
 
-    result = []
-    for animal in animals:
-        if animal.name == searchKeyWord:
+class LocationsView(View):
+    def get(self, request, location):
+        result = []
+        animals = Animal.objects
+
+        query = "SELECT id, last_seen_location, animal_id_id, " \
+                "MAX(last_seen_time) FROM WildAnimalsRegister_animalObservation " \
+                "WHERE last_seen_location = %s GROUP BY animal_id_id"
+        animalObservations = AnimalObservation.objects.raw(query, [location])
+
+        for animalObservation in animalObservations:
+            observedAnimal = animals.filter(id = animalObservation.animal_id_id)[0]
             result.append({
-                'id' : animal.id,
-                'name' : animal.name,
-                'species' : animal.species,
-                'observationInfo' : findObservationInfo(animal.id)
+                'id' : observedAnimal.id,
+                'name' : observedAnimal.name,
+                'species' : observedAnimal.species,
+                'observationInfo' : [{
+                    'id' : animalObservation.id,
+                    'location' : animalObservation.last_seen_location,
+                    'datetime' : animalObservation.last_seen_time
+                }]
             })
-    return JsonResponse(result, safe=False)
+        return JsonResponse(result, safe=False)
 
-def searchBySpecies(request):
-    animals = Animal.objects.get_queryset()
-    searchKeyWord = request.GET['searchParameter']
-    result = []
-    for animal in animals:
-        if animal.species == searchKeyWord:
-            result.append({
-                'id' : animal.id,
-                'name' : animal.name,
-                'species' : animal.species,
-                'observationInfo' : findObservationInfo(animal.id)
-            })
-    return JsonResponse(result, safe=False)
+class AnimalView(View):
 
-def searchByLocation(request):
-    result = []
-    animals = Animal.objects
-    searchLocation = request.GET['searchParameter']
-    animalObservations = AnimalObservation.objects.\
-        filter(last_seen_location=searchLocation).\
-        values('animal_id').\
-        annotate(latest_date=Max('last_seen_time'))
-    for animalObservation in animalObservations:
-        observedAnimal = animals.filter(id = animalObservation['animal_id'])[0]
-        result.append({
-            'id' : observedAnimal.id,
-            'name' : observedAnimal.name,
-            'species' : observedAnimal.species,
-            'observationInfo' : [{
-                'id' : AnimalObservation.objects.filter(last_seen_time=animalObservation['latest_date'])[0].id,
-                'location' : searchLocation,
-                'datetime' : animalObservation['latest_date']
-            }]
-        })
-    return JsonResponse(result, safe=False)
+    @csrf_exempt
+    def delete(self, request, name):
+        Animal.objects.filter(name = name).delete()
+        return JsonResponse([], safe=False)
 
-@csrf_exempt
-def addAnimal(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    @csrf_exempt
+    def put(self, request, name):
+        body = json.loads(request.body.decode('utf-8'))
 
-    Animal(name=body['animalName'],species=body['animalSpecies']).save()
-    return JsonResponse([], safe=False)
+        animal = Animal.objects.filter(id = body['id'])
+        observationRecords = AnimalObservation.objects
 
-@csrf_exempt
-def addObservation(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+        animal.update(name=name, species=body['species'])
+        for observationRecord in body['observationInfo']:
+            observationRecords.filter(id = observationRecord['id']).update(
+                last_seen_location=observationRecord['location'],
+                last_seen_time=observationRecord['datetime'])
+        return JsonResponse([], safe=False)
 
-    observedAnimal = Animal.objects.filter(name=body['animalName'])
-    if(len(observedAnimal) != 0):
-        AnimalObservation(animal_id=observedAnimal[0],
-                          last_seen_location=body['animalLocation'],
-                          last_seen_time=body['animalSeenTime']).save()
-    return JsonResponse([], safe=False)
-
-@csrf_exempt
-def removeAnimal(request):
-    animalName = request.body.decode('utf-8')
-    Animal.objects.filter(name = animalName).delete()
-    return JsonResponse([], safe=False)
-
-@csrf_exempt
-def changeAnimalData(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-
-    animal = Animal.objects.filter(id = body['id'])
-    observationRecords = AnimalObservation.objects
+    def get(self, request, name):
+        return JsonResponse(getAnimalJSON("name", name), safe=False)
 
 
-    animal.update(name=body['name'], species=body['species'])
-    for observationRecord in body['observationInfo']:
-        observationRecords.filter(id = observationRecord['id']).update(last_seen_location=observationRecord['location'], last_seen_time=observationRecord['datetime'])
-    return JsonResponse([], safe=False)
+class AnimalAddView(View):
+
+    @csrf_exempt
+    def post(self, request):
+        body = json.loads(request.body.decode('utf-8'))
+
+        Animal(name=body['animalName'],species=body['animalSpecies']).save()
+        return JsonResponse([], safe=False)
+
+class AnimalObservationAddView(View):
+
+    def post(self, request):
+        body = json.loads(request.body.decode('utf-8'))
+
+        observedAnimal = Animal.objects.filter(name=body['animalName'])
+        if(len(observedAnimal) != 0):
+            AnimalObservation(animal_id=observedAnimal[0],
+                              last_seen_location=body['animalLocation'],
+                              last_seen_time=body['animalSeenTime']).save()
+        return JsonResponse([], safe=False)
 
 
-def findObservationInfo(id):
+
+def getObservationInfoJSON(id):
     observationData = []
     for record in AnimalObservation.objects.filter(animal_id = id):
         observationData.append({
@@ -112,3 +94,17 @@ def findObservationInfo(id):
             'datetime' : record.last_seen_time
         })
     return observationData
+
+def getAnimalJSON(searchParameter, parameterValue):
+    if (searchParameter == 'name'): animals = Animal.objects.filter(name = parameterValue)
+    elif (searchParameter == 'species'): animals = Animal.objects.filter(species = parameterValue)
+
+    result = []
+    for animal in animals:
+        result.append({
+            'id' : animal.id,
+            'name' : animal.name,
+            'species' : animal.species,
+            'observationInfo' : getObservationInfoJSON(animal.id)
+        })
+    return result
