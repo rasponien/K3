@@ -27,10 +27,9 @@
 }
 
 .button-data {
-    width: 351px;
+    width: 348px;
     margin: 0;
     padding: 0;
-    float: left;
     height: 70px;
 }
 
@@ -87,6 +86,7 @@
 
 .dataSection {
     height: 90px;
+    width: 600px;
     margin: 0px auto 80px auto;
     display: inline-block;
 }
@@ -112,12 +112,9 @@
     background-color: #ffc343;
 }
 
-.addA
-
 .submitChanges {
     background-color: #3fbd3e;
     width: 702px;
-    margin: -70px auto;
 }
 
 
